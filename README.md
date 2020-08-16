@@ -1,1 +1,1 @@
-# magic-report
+# magic-reports

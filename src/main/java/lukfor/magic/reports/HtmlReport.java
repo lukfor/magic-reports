@@ -14,6 +14,7 @@ import lukfor.magic.reports.functions.ImageFunction;
 import lukfor.magic.reports.functions.ImageUrlFunction;
 import lukfor.magic.reports.functions.IncludeScriptFunction;
 import lukfor.magic.reports.functions.IncludeStyleFunction;
+import lukfor.magic.reports.functions.JsonFunction;
 import lukfor.magic.reports.functions.text.DecimalFunction;
 import lukfor.magic.reports.functions.text.PercentageFunction;
 import lukfor.magic.reports.util.FileUtil;
@@ -122,7 +123,8 @@ public class HtmlReport {
 		context.set("include_script", new IncludeScriptFunction(this));
 
 		context.set("data", new DataWrapperFunction());
-
+		context.set("json", new JsonFunction());
+		
 		context.set("image", new ImageFunction(this));
 		context.set("image_url", new ImageUrlFunction(this));
 

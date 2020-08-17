@@ -82,15 +82,6 @@ public class HtmlReport {
 		return template.render(context);
 	}
 
-	public String getContent(String path) throws Exception {
-		String filename = inputDirectory + "/" + path;
-		if (useClasspath) {
-			return FileUtil.readStringFromClasspath(filename);
-		} else {
-			return FileUtil.readStringFromFile(filename);
-		}
-	}
-
 	public byte[] getBytes(String path) throws Exception {
 		String filename = inputDirectory + "/" + path;
 		if (useClasspath) {
@@ -109,6 +100,14 @@ public class HtmlReport {
 		return filename;
 	}
 
+	public String renderTemplateAndCopyToAssets(String path) throws Exception {
+
+		String content = renderTemplate(path);
+		String filename = assets.addToAssets(path, content.getBytes());
+
+		return filename;
+	}
+	
 	public void generate(File outputFile) throws IOException {
 
 		System.out.println("Process file " + inputDirectory + "/" + mainFilename + "...");

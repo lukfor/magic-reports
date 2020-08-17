@@ -23,14 +23,18 @@ public class HtmlReportAssets {
 		}
 	}
 
-	public String addToAssets(String path, byte[] bytes) throws IOException {
+	public String addToAssets(String path, byte[] bytes) {
 		File file = new File(folderFilename + "/" + path);
 		if (!file.getParentFile().exists()) {
 			file.getParentFile().mkdirs();
 		}
-		FileOutputStream out = new FileOutputStream(file);
-		out.write(bytes);
-		out.close();
+		try {
+			FileOutputStream out = new FileOutputStream(file);
+			out.write(bytes);
+			out.close();
+		}catch (Exception e) {
+			//TODO:
+		}
 
 		// use name, to make it relative
 		return folderName + "/" + path;

@@ -8,20 +8,6 @@ import java.io.InputStream;
 
 public class FileUtil {
 
-	public static String readStringFromFile(String filename) throws IOException {
-		FileInputStream in = new FileInputStream(filename);
-		String content = readString(in);
-		in.close();
-		return content;
-	}
-
-	public static String readStringFromClasspath(String path) throws IOException {
-		InputStream in = FileUtil.class.getResourceAsStream(path);
-		String content = readString(in);
-		in.close();
-		return content;
-	}
-
 	public static byte[] readBytesFromFile(String filename) throws IOException {
 		FileInputStream in = new FileInputStream(filename);
 		byte[] bytes = readBytes(in);
@@ -52,29 +38,29 @@ public class FileUtil {
 		return targetArray;
 	}
 
-	public static String encodeBase64(String mimeType, String content) throws Exception {	
-		return encodeBase64(mimeType, content.getBytes());		
+	public static String encodeBase64(String mimeType, String content) {
+		return encodeBase64(mimeType, content.getBytes());
 	}
-	
-	public static String encodeBase64(String mimeType, byte[] bytes) throws Exception {
+
+	public static String encodeBase64(String mimeType, byte[] bytes) {
 		String encodedContent = java.util.Base64.getEncoder().encodeToString(bytes);
-		String data = "data:" + mimeType + ";base64," + encodedContent;		
-		return data;		
+		String data = "data:" + mimeType + ";base64," + encodedContent;
+		return data;
 	}
-	
+
 	public static boolean deleteFolder(File folder) {
-		
+
 		if (!folder.exists()) {
 			return false;
 		}
-		
-	    File[] allContents = folder.listFiles();
-	    if (allContents != null) {
-	        for (File file : allContents) {
-	            deleteFolder(file);
-	        }
-	    }
-	    return folder.delete();
+
+		File[] allContents = folder.listFiles();
+		if (allContents != null) {
+			for (File file : allContents) {
+				deleteFolder(file);
+			}
+		}
+		return folder.delete();
 	}
 
 }

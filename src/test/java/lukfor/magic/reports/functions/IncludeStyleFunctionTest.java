@@ -24,7 +24,7 @@ public class IncludeStyleFunctionTest extends TestCase {
 		report.generate(output);
 
 		assertTrue(output.exists());
-		assertEqualsContent("/include_style/link/expected.html", output);
+		assertEqualsContent("/include_style/link/index.expected.html", output);
 
 	}
 	
@@ -41,7 +41,7 @@ public class IncludeStyleFunctionTest extends TestCase {
 		report.generate(output);
 
 		assertTrue(output.exists());	
-		assertEqualsContent("/include_style/link/expected.html", output);
+		assertEqualsContent("/include_style/link/index.expected.html", output);
 
 	}
 
@@ -55,17 +55,19 @@ public class IncludeStyleFunctionTest extends TestCase {
 
 		HtmlReport report = new HtmlReport("/include_style/local");
 		report.setSelfContained(false);
+		report.set("color", "#ff0000");
 		report.generate(output);
 
 		assertTrue(output.exists());
-		assertEqualsContent("/include_style/local/expected.html", output);
+		assertEqualsContent("/include_style/local/index.expected.html", output);
 		
 		File assets = new File(folder, "include_style_local_files");		
 		assertTrue(assets.exists());
 
 		File style = new File(assets, "index.css");		
 		assertTrue(style.exists());
-		
+		assertEqualsContent("/include_style/local/index.expected.css", style);
+
 	}
 	
 	public void testLocalSelfContained() throws IOException {
@@ -78,10 +80,11 @@ public class IncludeStyleFunctionTest extends TestCase {
 
 		HtmlReport report = new HtmlReport("/include_style/local");
 		report.setSelfContained(true);
+		report.set("color", "#ff0000");
 		report.generate(output);
 
 		assertTrue(output.exists());
-		assertEqualsContent("/include_style/local/expected_self_contained.html", output);
+		assertEqualsContent("/include_style/local/index.expected.self_contained.html", output);
 		
 		//no assets folder
 		File assets = new File(folder, "include_style_local_files");		

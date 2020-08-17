@@ -28,19 +28,15 @@ public class IncludeScriptFunction implements Function<String, String> {
 
 				System.out.println("  Include javascript " + url + "...");
 
-				try {
-					String content = report.renderTemplate(url);
-					source = FileUtil.encodeBase64("text/css", content);
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
+				String content = report.renderTemplate(url);
+				source = FileUtil.encodeBase64("text/css", content);
 
 			} else {
 
 				System.out.println("  Copy javascript " + url + " into assets...");
 
 				try {
-					source = report.copyToAssets(url);
+					source = report.renderTemplateAndCopyToAssets(url);
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}

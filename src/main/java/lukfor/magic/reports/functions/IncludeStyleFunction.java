@@ -15,9 +15,9 @@ public class IncludeStyleFunction implements Function<String, String> {
 
 	@Override
 	public String apply(final String url) {
-		
-		String href= "";
-		
+
+		String href = "";
+
 		if (url.startsWith("https://") || url.startsWith("http://")) {
 
 			href = url;
@@ -28,26 +28,22 @@ public class IncludeStyleFunction implements Function<String, String> {
 
 				System.out.println("  Include style " + url + "...");
 
-				try {
-					String content = report.renderTemplate(url);
-					href = FileUtil.encodeBase64("text/css", content);					
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
+				String content = report.renderTemplate(url);
+				href = FileUtil.encodeBase64("text/css", content);
 
 			} else {
 
 				System.out.println("  Copy style " + url + " into assets...");
-
 				try {
-					href = report.copyToAssets(url);
+					href = report.renderTemplateAndCopyToAssets(url);
 				} catch (Exception e) {
-					throw new RuntimeException(e);
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-
+	
 			}
 		}
-		
+
 		StringBuilder html = new StringBuilder();
 		html.append("<!-- " + url + " -->\n");
 		html.append("<link rel=\"stylesheet\" href=\"" + href + "\">");

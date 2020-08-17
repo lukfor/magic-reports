@@ -1,2 +1,2 @@
-var data = {{data(bean).json()}};
+var data = {{json(bean)}};
 console.log(data);

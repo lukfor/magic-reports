@@ -2,7 +2,6 @@ package lukfor.magic.reports;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 import lukfor.magic.reports.util.FileUtil;
 

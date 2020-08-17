@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 
-import lukfor.magic.reports.HtmlReport;
+import lukfor.magic.reports.MagicReport;
+import lukfor.magic.reports.widgets.DataTableWidget;
 
 public class DataTablesReport {
 
@@ -19,10 +20,13 @@ public class DataTablesReport {
 			persons.add(new Person("Max" + i, "Mustermann" + i, "max" + i + ".mustermann@mail.com"));
 		}
 
-		HtmlReport report = new HtmlReport("/data-tables");
+		MagicReport report = new MagicReport("/data-tables");
 		report.setSelfContained(true);
 		report.set("caption", caption);
 		report.set("persons", persons);
+		
+		new DataTableWidget(report); 
+		
 		report.generate(new File("data-tables.html"));
 	}
 

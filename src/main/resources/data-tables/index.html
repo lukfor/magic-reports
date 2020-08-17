@@ -6,35 +6,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <title>Data Tables Example</title>
-  {{include_style("https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css")}}
+  
+  {{include_widgets("")}}
+  
 </head>
 
 <body>
 
 <h1>{{caption}}</h1>
 
-<table id="myTable" class="display">
-</table>
+<h2>Table 1</h2>
 
-{{include_script("https://code.jquery.com/jquery-3.5.1.slim.min.js")}}
-{{include_script("https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js")}}
+{{
+	data_table({
+		columns: [
+		   		{data: "firstName", title: "First Name"},
+		   		{data: "lastName", title: "Last Name"},
+		   		{data: "email", title: "E-Mail"}
+		],
+		data: persons
+	})
+}}
 
-<script>
+<h2>Table 2</h2>
 
-	$(document).ready( function () {
-	    
-	    $('#myTable').DataTable({
-	    	columns: [
-	    		{data: 'firstName', title: 'First Name'},
-	    		{data: 'lastName'},
-	    		{data: 'email'}
-	    	],
-	    	data: {{json(persons)}}
-	    });
-	    
-	});
+{{
+	data_table({
+		columns: [
+		   		{data: "email", title: "E-Mail"}
+		],
+		data: persons
+	})
+}}
 
-</script>
+{{activate_widgets("")}}
 
 </body>
 </html>

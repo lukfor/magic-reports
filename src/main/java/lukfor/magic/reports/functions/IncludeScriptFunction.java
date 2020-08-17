@@ -29,7 +29,7 @@ public class IncludeScriptFunction implements Function<String, String> {
 				System.out.println("  Include javascript " + url + "...");
 
 				String content = report.renderTemplate(url);
-				source = FileUtil.encodeBase64("text/css", content);
+				source = FileUtil.encodeBase64("text/javascript", content);
 
 			} else {
 

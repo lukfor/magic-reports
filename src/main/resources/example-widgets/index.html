@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <title>Data Tables Example</title>
+
+  {{import_widget("data_table")}}
+  {{import_widget("plotly")}}
+  {{import_widget("vega_lite")}}
+
+
+</head>
+
+<body>
+
+<h1>{{caption}}</h1>
+
+<h2>DataTables</h2>
+
+{{
+	data_table({
+		columns: [
+		   		{data: "firstName", title: "First Name"},
+		   		{data: "lastName", title: "Last Name"},
+		   		{data: "email", title: "E-Mail"}
+		],
+		data: persons
+	})
+}}
+
+<h2>Plotly</h2>
+
+{{
+	plotly({
+		traces: [{
+		  x: array(persons).extract("age"),
+		  y: array(persons).extract("salary"),
+		  mode: "markers",
+		  type: "scatter"
+		}],
+		layout: {
+			plot_bgcolor: "rgba(255,255,255,1)"
+		}
+	})
+}}
+
+<h2>Vega-Lite</h2>
+
+{{vega_lite("plots/plot.json")}}
+
+<hr>
+
+{{activate_widgets("")}}
+
+</body>
+</html>

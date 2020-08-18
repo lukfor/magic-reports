@@ -11,6 +11,9 @@ public class WidgetFactory {
 
 		case "plotly":
 			return new PlotlyWidget();
+			
+		case "vega_lite":
+			return new VegaLiteWidget();
 
 		default:
 			throw new RuntimeException("Widget '" + id + "' not found.");

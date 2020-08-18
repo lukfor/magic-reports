@@ -16,7 +16,7 @@ public class DataTablesReport {
 
 		List<Person> persons = new Vector<Person>();
 
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			persons.add(new Person("Max" + i, "Mustermann" + i, "max" + i + ".mustermann@mail.com"));
 		}
 

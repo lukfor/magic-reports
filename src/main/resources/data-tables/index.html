@@ -9,6 +9,7 @@
   
   {{import_widget("data_table")}}
   {{import_widget("plotly")}}
+  {{import_widget("vega_lite")}}
   
   
 </head>
@@ -17,7 +18,7 @@
 
 <h1>{{caption}}</h1>
 
-<h2>Table 1</h2>
+<h2>DataTables</h2>
 
 {{
 	data_table({
@@ -30,7 +31,7 @@
 	})
 }}
 
-<h2>Age</h2>
+<h2>Plotly</h2>
 
 {{
 	plotly({
@@ -45,6 +46,25 @@
 		}
 	})
 }}
+
+<h2>Vega</h2>
+
+{{
+  vega_lite({
+        $schema: "https://vega.github.io/schema/vega-lite/v4.json",
+        data: {
+          values: persons
+        },
+        mark: "point",
+        encoding: {
+          x: {field: "age", type: "quantitative"},
+          y: {field: "salary", type: "quantitative"}
+        },
+        width: 1000
+      })
+}} 
+
+
 
 {{activate_widgets("")}}
 

@@ -6,9 +6,7 @@ import java.util.function.Function;
 
 import lukfor.magic.reports.functions.IncludeScriptFunction;
 import lukfor.magic.reports.functions.IncludeStyleFunction;
-import lukfor.magic.reports.widgets.DataTableWidget;
 import lukfor.magic.reports.widgets.IWidget;
-import lukfor.magic.reports.widgets.PlotlyWidget;
 import lukfor.magic.reports.widgets.WidgetFactory;
 
 public class MagicReport extends HtmlReport {

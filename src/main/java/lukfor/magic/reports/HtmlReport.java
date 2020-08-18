@@ -10,7 +10,6 @@ import io.marioslab.basis.template.TemplateContext;
 import io.marioslab.basis.template.TemplateLoader;
 import io.marioslab.basis.template.TemplateLoader.ClasspathTemplateLoader;
 import lukfor.magic.reports.functions.ArrayHelperFunction;
-import lukfor.magic.reports.functions.DataWrapperFunction;
 import lukfor.magic.reports.functions.ImageFunction;
 import lukfor.magic.reports.functions.ImageUrlFunction;
 import lukfor.magic.reports.functions.IncludeScriptFunction;
@@ -121,7 +120,9 @@ public class HtmlReport {
 		context.set("report", this);
 
 		context.set("include_style", new IncludeStyleFunction(this));
+		context.set("import_style", new IncludeStyleFunction(this));
 		context.set("include_script", new IncludeScriptFunction(this));
+		context.set("import_script", new IncludeScriptFunction(this));
 
 		context.set("json", new JsonFunction());
 		

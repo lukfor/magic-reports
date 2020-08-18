@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+  <meta name="description" content="">
+  <title>Data Tables Example</title>
+
+  {{import_style("css/keen-dashboards.css")}}
+
+  {{import_widget("data_table")}}
+  {{import_widget("plotly")}}
+  {{import_widget("vega_lite")}}
+
+</head>
+
+<body class="keen-dashboard">
+
+
+
+  <div class="container">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="./">{{title}}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-full grid grid-hero-thirds" style="margin-left: 30px; margin-right: 30px;">
+
+    <div class="grid-hero">
+      <div class="hero chart-wrapper">
+        <div class="chart-title">
+          Data Table
+        </div>
+        <div class="chart-stage" style="height: 500px">
+          {{ data_table("tables/table1.json") }}
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <div class="chart-title">
+          Plotly
+        </div>
+        <div class="chart-stage" style="height: 500px">
+          {{ plotly("plots/plot1.json") }}
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-wrapper" style="height: 300px">
+      <div class="chart-title">
+        Vega-Lite
+      </div>
+      <div class="chart-stage">
+        {{ vega_lite("plots/plot2.json") }}
+      </div>
+    </div>
+
+    <div class="chart-wrapper" style="height: 300px">
+      <div class="chart-title">
+        Vega-Lite
+      </div>
+      <div class="chart-stage">
+        {{ vega_lite("plots/plot3.json") }}
+      </div>
+    </div>
+
+    <div class="chart-wrapper" style="height: 300px">
+      <div class="chart-title">
+        Vega-Lite
+      </div>
+      <div class="chart-stage">
+        {{ vega_lite("plots/plot4.json") }}
+      </div>
+    </div>
+
+  </div>
+
+  {{activate_widgets("")}}
+
+</body>
+
+</html>

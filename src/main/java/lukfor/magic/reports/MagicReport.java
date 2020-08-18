@@ -6,14 +6,13 @@ import java.util.function.Function;
 
 import lukfor.magic.reports.functions.IncludeScriptFunction;
 import lukfor.magic.reports.functions.IncludeStyleFunction;
+import lukfor.magic.reports.widgets.DataTableWidget;
+import lukfor.magic.reports.widgets.IWidget;
+import lukfor.magic.reports.widgets.PlotlyWidget;
+import lukfor.magic.reports.widgets.WidgetFactory;
 
 public class MagicReport extends HtmlReport {
-
-	private List<String> styles = new Vector<String>();
-
-	private List<String> scripts = new Vector<String>();
-
-	private List<String> activationCodes = new Vector<String>();
+	private List<IWidget> importedWidgets = new Vector<>();
 
 	public MagicReport(String inputDirectory) {
 
@@ -21,12 +20,20 @@ public class MagicReport extends HtmlReport {
 
 		final IncludeStyleFunction styleFunction = new IncludeStyleFunction(this);
 
-		set("include_widgets", new Function<String, String>() {
+		set("import_widget", new Function<String, String>() {
 
 			@Override
-			public String apply(String arg0) {
-				String html = "<!-- Widgets styles -->\n";
-				for (String style : styles) {
+			public String apply(String id) {
+
+				IWidget widget = WidgetFactory.createWidget(id);
+				importedWidgets.add(widget);
+
+				// register render function
+				set(widget.getId(), widget.getRenderFunction());
+
+				// build head tags
+				String html = "<!-- Widget: " + id + " -->\n";
+				for (String style : widget.getStyles()) {
 					html += styleFunction.apply(style) + "\n";
 				}
 				return html;
@@ -41,17 +48,25 @@ public class MagicReport extends HtmlReport {
 			@Override
 			public String apply(String arg0) {
 
-				String html = "<!-- Widgets scripts -->\n";
-				for (String script : scripts) {
-					html += scriptFunction.apply(script) + "\n";
+				// activate and init only imported widgets
+				String html = "";
+
+				for (IWidget widget : importedWidgets) {
+					html += "\n";
+					html += "<!-- Widget: " + widget.getId() + " -->\n";
+					for (String script : widget.getScripts()) {
+						html += scriptFunction.apply(script) + "\n";
+					}
 				}
 
 				html += "\n";
-				html += "<!-- Widgets activation scripts -->\n";
+				html += "<!-- Init Widgets -->\n";
 				html += "<script>\n";
 				html += "$(document).ready( function () {\n";
-				for (String code : activationCodes) {
-					html += code + "\n";
+				for (IWidget widget : importedWidgets) {
+					html += "\n";
+					html += "// Init " + widget.getId() + "\n";
+					html += widget.getInitializer();
 				}
 				html += "});\n";
 				html += "</script>";
@@ -62,18 +77,6 @@ public class MagicReport extends HtmlReport {
 
 		});
 
-	}
-
-	public void addStyle(String style) {
-		styles.add(style);
-	}
-
-	public void addScript(String script) {
-		scripts.add(script);
-	}
-
-	public void addActivationCode(String code) {
-		activationCodes.add(code);
 	}
 
 }

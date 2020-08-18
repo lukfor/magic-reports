@@ -7,13 +7,13 @@ import java.util.function.Function;
 
 import lukfor.magic.reports.data.DataWrapper;
 
-public class DataTableWidget implements IWidget {
+public class PlotlyWidget implements IWidget {
 
 	private RenderFunction renderFunction = new RenderFunction();
 
 	@Override
 	public String getId() {
-		return "data_table";
+		return "plotly";
 	}
 
 	@Override
@@ -23,13 +23,12 @@ public class DataTableWidget implements IWidget {
 
 	@Override
 	public String[] getStyles() {
-		return new String[] { "https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" };
+		return new String[] {};
 	}
 
 	@Override
 	public String[] getScripts() {
-		return new String[] { "https://code.jquery.com/jquery-3.5.1.slim.min.js",
-				"https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js" };
+		return new String[] { "https://cdn.plot.ly/plotly-latest.min.js" };
 	}
 
 	@Override
@@ -48,14 +47,18 @@ public class DataTableWidget implements IWidget {
 		private List<String> inits = new Vector<String>();;
 
 		@Override
-		public String apply(HashMap<String, Object> config) {
+		public String apply(HashMap<String, Object> data) {
 
-			String id = "magic_table_" + inits.size();
+			String id = "magic_plot_" + inits.size();
 
-			String code = "$('#" + id + "').DataTable(" + new DataWrapper(config).json() + ");";
+			Object traces = data.get("traces");
+			Object layout = data.get("layout");
+
+			String code = "Plotly.newPlot('" + id + "', " + new DataWrapper(traces).json() + ", "
+					+ new DataWrapper(layout).json() + ");";
 			inits.add(code);
 
-			return "<table id=\"" + id + "\" class=\"display\"></table>";
+			return "<div id=\"" + id + "\"></div>";
 
 		}
 

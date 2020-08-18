@@ -7,7 +7,9 @@
   <meta name="description" content="">
   <title>Data Tables Example</title>
   
-  {{include_widgets("")}}
+  {{import_widget("data_table")}}
+  {{import_widget("plotly")}}
+  
   
 </head>
 
@@ -28,14 +30,19 @@
 	})
 }}
 
-<h2>Table 2</h2>
+<h2>Age</h2>
 
 {{
-	data_table({
-		columns: [
-		   		{data: "email", title: "E-Mail"}
-		],
-		data: persons
+	plotly({
+		traces: [{
+		  x: array(persons).extract("age"),
+		  y: array(persons).extract("salary"),
+		  mode: "markers",
+		  type: "scatter"
+		}],
+		layout: {
+			plot_bgcolor: "rgba(255,255,255,1)"
+		}
 	})
 }}
 

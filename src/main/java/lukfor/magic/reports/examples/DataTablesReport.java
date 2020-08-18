@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
 import lukfor.magic.reports.MagicReport;
-import lukfor.magic.reports.widgets.DataTableWidget;
 
 public class DataTablesReport {
 
@@ -24,24 +24,28 @@ public class DataTablesReport {
 		report.setSelfContained(true);
 		report.set("caption", caption);
 		report.set("persons", persons);
-		
-		new DataTableWidget(report); 
-		
+
 		report.generate(new File("data-tables.html"));
 	}
 
 	public static class Person {
 
-		private String firstName;
+		public String firstName;
 
-		private String lastName;
+		public String lastName;
 
-		private String email;
+		public String email;
+
+		public int age = 0;
+
+		public int salary = 0;
 
 		public Person(String firstName, String lastName, String email) {
 			this.firstName = firstName;
 			this.lastName = lastName;
 			this.email = email;
+			this.age = ThreadLocalRandom.current().nextInt(10, 80);
+			this.salary = ThreadLocalRandom.current().nextInt(10*age, 5000);
 		}
 
 		public String getFirstName() {
@@ -66,6 +70,22 @@ public class DataTablesReport {
 
 		public void setEmail(String email) {
 			this.email = email;
+		}
+
+		public int getAge() {
+			return age;
+		}
+
+		public void setAge(int age) {
+			this.age = age;
+		}
+
+		public int getSalary() {
+			return salary;
+		}
+
+		public void setSalary(int salary) {
+			this.salary = salary;
 		}
 
 	}

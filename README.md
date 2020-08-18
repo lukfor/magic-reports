@@ -15,7 +15,7 @@ Add the following dependency to your Maven Project:
 
 0r include it as a dependency in your Gradle project:
 
-    compile 'com.github.lukfor:magic-progress:0.0.1'
+    compile 'com.github.lukfor:magic-reports:0.0.1'
 
 
 ## Create your first report

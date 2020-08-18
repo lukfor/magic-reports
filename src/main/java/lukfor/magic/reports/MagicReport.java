@@ -23,7 +23,7 @@ public class MagicReport extends HtmlReport {
 			@Override
 			public String apply(String id) {
 
-				IWidget widget = WidgetFactory.createWidget(id);
+				IWidget widget = WidgetFactory.createWidget(id, MagicReport.this);
 				importedWidgets.add(widget);
 
 				// register render function

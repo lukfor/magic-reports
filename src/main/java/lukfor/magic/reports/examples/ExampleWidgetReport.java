@@ -8,11 +8,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import lukfor.magic.reports.MagicReport;
 
-public class DataTablesReport {
+public class ExampleWidgetReport {
 
 	public static void main(String[] args) throws IOException {
 
-		String caption = "My Friends";
+		String caption = "Magic Reports";
 
 		List<Person> persons = new Vector<Person>();
 
@@ -20,12 +20,12 @@ public class DataTablesReport {
 			persons.add(new Person("Max" + i, "Mustermann" + i, "max" + i + ".mustermann@mail.com"));
 		}
 
-		MagicReport report = new MagicReport("/data-tables");
+		MagicReport report = new MagicReport("/example-widgets");
 		report.setSelfContained(true);
 		report.set("caption", caption);
 		report.set("persons", persons);
 
-		report.generate(new File("data-tables.html"));
+		report.generate(new File("example-widgets.html"));
 	}
 
 	public static class Person {
@@ -45,7 +45,7 @@ public class DataTablesReport {
 			this.lastName = lastName;
 			this.email = email;
 			this.age = ThreadLocalRandom.current().nextInt(10, 80);
-			this.salary = ThreadLocalRandom.current().nextInt(10*age, 5000);
+			this.salary = ThreadLocalRandom.current().nextInt(10 * age, 5000);
 		}
 
 		public String getFirstName() {

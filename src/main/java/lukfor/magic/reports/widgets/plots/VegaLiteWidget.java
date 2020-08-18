@@ -1,15 +1,21 @@
-package lukfor.magic.reports.widgets;
+package lukfor.magic.reports.widgets.plots;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
-import java.util.function.Function;
 
+import lukfor.magic.reports.HtmlReport;
 import lukfor.magic.reports.data.DataWrapper;
+import lukfor.magic.reports.widgets.IWidget;
+import lukfor.magic.reports.widgets.WidgetRenderFunction;
 
 public class VegaLiteWidget implements IWidget {
 
-	private RenderFunction renderFunction = new RenderFunction();
+	private RenderFunction renderFunction;
+
+	public VegaLiteWidget(HtmlReport report) {
+		renderFunction = new RenderFunction(report);
+	}
 
 	@Override
 	public String getId() {
@@ -17,7 +23,7 @@ public class VegaLiteWidget implements IWidget {
 	}
 
 	@Override
-	public Function<HashMap<String, Object>, String> getRenderFunction() {
+	public WidgetRenderFunction getRenderFunction() {
 		return renderFunction;
 	}
 
@@ -28,7 +34,8 @@ public class VegaLiteWidget implements IWidget {
 
 	@Override
 	public String[] getScripts() {
-		return new String[] { "https://cdn.jsdelivr.net/npm/vega@5.13.0","https://cdn.jsdelivr.net/npm/vega-lite@4.14.1","https://cdn.jsdelivr.net/npm/vega-embed@6.10.0" };
+		return new String[] { "https://cdn.jsdelivr.net/npm/vega@5.13.0",
+				"https://cdn.jsdelivr.net/npm/vega-lite@4.14.1", "https://cdn.jsdelivr.net/npm/vega-embed@6.10.0" };
 	}
 
 	@Override
@@ -42,19 +49,23 @@ public class VegaLiteWidget implements IWidget {
 
 	}
 
-	public static class RenderFunction implements Function<HashMap<String, Object>, String> {
+	public static class RenderFunction extends WidgetRenderFunction {
 
 		private List<String> inits = new Vector<String>();;
 
+		public RenderFunction(HtmlReport report) {
+			super(report);
+		}
+
 		@Override
-		public String apply(HashMap<String, Object> spec) {
+		public String render(HashMap<String, Object> spec) {
 
 			String id = "magic_vega_" + inits.size();
 
 			String code = "vegaEmbed('#" + id + "', " + new DataWrapper(spec).json() + ");";
 			inits.add(code);
 
-			return "<div id=\"" + id + "\" style=\"width: 100%;\"></div>";
+			return "<div id=\"" + id + "\"></div>";
 
 		}
 

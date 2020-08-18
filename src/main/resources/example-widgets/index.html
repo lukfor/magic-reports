@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <title>Data Tables Example</title>
-  
+
   {{import_widget("data_table")}}
   {{import_widget("plotly")}}
   {{import_widget("vega_lite")}}
-  
-  
+
+
 </head>
 
 <body>
@@ -47,24 +47,11 @@
 	})
 }}
 
-<h2>Vega</h2>
+<h2>Vega-Lite</h2>
 
-{{
-  vega_lite({
-        $schema: "https://vega.github.io/schema/vega-lite/v4.json",
-        data: {
-          values: persons
-        },
-        mark: "point",
-        encoding: {
-          x: {field: "age", type: "quantitative"},
-          y: {field: "salary", type: "quantitative"}
-        },
-        width: 1000
-      })
-}} 
+{{vega_lite("plots/plot.json")}}
 
-
+<hr>
 
 {{activate_widgets("")}}
 

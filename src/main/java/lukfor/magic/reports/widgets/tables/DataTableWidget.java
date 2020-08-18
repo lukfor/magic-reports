@@ -1,23 +1,29 @@
-package lukfor.magic.reports.widgets;
+package lukfor.magic.reports.widgets.tables;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
-import java.util.function.Function;
 
+import lukfor.magic.reports.HtmlReport;
 import lukfor.magic.reports.data.DataWrapper;
+import lukfor.magic.reports.widgets.IWidget;
+import lukfor.magic.reports.widgets.WidgetRenderFunction;
 
 public class DataTableWidget implements IWidget {
 
-	private RenderFunction renderFunction = new RenderFunction();
+	private RenderFunction renderFunction;
 
+	public DataTableWidget(HtmlReport report) {
+		 renderFunction = new RenderFunction(report);
+	}
+	
 	@Override
 	public String getId() {
 		return "data_table";
 	}
 
 	@Override
-	public Function<HashMap<String, Object>, String> getRenderFunction() {
+	public WidgetRenderFunction getRenderFunction() {
 		return renderFunction;
 	}
 
@@ -43,12 +49,16 @@ public class DataTableWidget implements IWidget {
 
 	}
 
-	public static class RenderFunction implements Function<HashMap<String, Object>, String> {
+	public static class RenderFunction extends WidgetRenderFunction {
 
 		private List<String> inits = new Vector<String>();;
+		
+		public RenderFunction(HtmlReport report) {
+			super(report);
+		}
 
 		@Override
-		public String apply(HashMap<String, Object> config) {
+		public String render(HashMap<String, Object> config) {
 
 			String id = "magic_table_" + inits.size();
 

@@ -12,6 +12,7 @@ public class ArrayWrapper {
 		this.object = object;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Object> extract(String property)
 			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		if (object == null) {

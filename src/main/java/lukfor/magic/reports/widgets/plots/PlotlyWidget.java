@@ -1,15 +1,21 @@
-package lukfor.magic.reports.widgets;
+package lukfor.magic.reports.widgets.plots;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
-import java.util.function.Function;
 
+import lukfor.magic.reports.HtmlReport;
 import lukfor.magic.reports.data.DataWrapper;
+import lukfor.magic.reports.widgets.IWidget;
+import lukfor.magic.reports.widgets.WidgetRenderFunction;
 
 public class PlotlyWidget implements IWidget {
 
-	private RenderFunction renderFunction = new RenderFunction();
+	private RenderFunction renderFunction;
+
+	public PlotlyWidget(HtmlReport report) {
+		renderFunction = new RenderFunction(report);
+	}
 
 	@Override
 	public String getId() {
@@ -17,7 +23,7 @@ public class PlotlyWidget implements IWidget {
 	}
 
 	@Override
-	public Function<HashMap<String, Object>, String> getRenderFunction() {
+	public WidgetRenderFunction getRenderFunction() {
 		return renderFunction;
 	}
 
@@ -42,17 +48,21 @@ public class PlotlyWidget implements IWidget {
 
 	}
 
-	public static class RenderFunction implements Function<HashMap<String, Object>, String> {
+	public static class RenderFunction extends WidgetRenderFunction {
+
+		public RenderFunction(HtmlReport report) {
+			super(report);
+		}
 
 		private List<String> inits = new Vector<String>();;
 
 		@Override
-		public String apply(HashMap<String, Object> data) {
+		public String render(HashMap<String, Object> config) {
 
 			String id = "magic_plot_" + inits.size();
 
-			Object traces = data.get("traces");
-			Object layout = data.get("layout");
+			Object traces = config.get("traces");
+			Object layout = config.get("layout");
 
 			String code = "Plotly.newPlot('" + id + "', " + new DataWrapper(traces).json() + ", "
 					+ new DataWrapper(layout).json() + ");";

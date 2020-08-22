@@ -13,7 +13,7 @@ Add the following dependency to your Maven Project:
       <version>0.0.1</version>
     </dependency>
 
-0r include it as a dependency in your Gradle project:
+Or include it as a dependency in your Gradle project:
 
     compile 'com.github.lukfor:magic-reports:0.0.1'
 

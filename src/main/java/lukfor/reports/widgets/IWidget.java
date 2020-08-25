@@ -1,15 +1,15 @@
 package lukfor.reports.widgets;
 
+import java.util.HashMap;
+
 public interface IWidget {
 
 	public String getId();
 
-	public WidgetRenderFunction getRenderFunction();
+	public WidgetInstance createInstance(HashMap<String, Object> config);
 
 	public String[] getStyles();
-	
+
 	public String[] getScripts();
-
-	public String getInitializer();
-
+	
 }

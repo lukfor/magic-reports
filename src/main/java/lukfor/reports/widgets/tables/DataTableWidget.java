@@ -1,30 +1,16 @@
 package lukfor.reports.widgets.tables;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
 
-import lukfor.reports.HtmlReport;
 import lukfor.reports.data.DataWrapper;
-import lukfor.reports.widgets.IWidget;
-import lukfor.reports.widgets.WidgetRenderFunction;
+import lukfor.reports.widgets.AbstractWidget;
+import lukfor.reports.widgets.WidgetInstance;
 
-public class DataTableWidget implements IWidget {
+public class DataTableWidget extends AbstractWidget {
 
-	private RenderFunction renderFunction;
-
-	public DataTableWidget(HtmlReport report) {
-		 renderFunction = new RenderFunction(report);
-	}
-	
 	@Override
 	public String getId() {
 		return "data_table";
-	}
-
-	@Override
-	public WidgetRenderFunction getRenderFunction() {
-		return renderFunction;
 	}
 
 	@Override
@@ -39,39 +25,13 @@ public class DataTableWidget implements IWidget {
 	}
 
 	@Override
-	public String getInitializer() {
+	public WidgetInstance createInstance(HashMap<String, Object> config) {
 
-		String html = "";
-		for (String code : renderFunction.getInits()) {
-			html += code + "\n";
-		}
-		return html;
+		String id = createId();		
+		String html = "<table id=\"" + id + "\" class=\"display\"></table>";
+		String code = "$('#" + id + "').DataTable(" + new DataWrapper(config).json() + ");";
 
-	}
-
-	public static class RenderFunction extends WidgetRenderFunction {
-
-		private List<String> inits = new Vector<String>();;
-		
-		public RenderFunction(HtmlReport report) {
-			super(report);
-		}
-
-		@Override
-		public String render(HashMap<String, Object> config) {
-
-			String id = "magic_table_" + inits.size();
-
-			String code = "$('#" + id + "').DataTable(" + new DataWrapper(config).json() + ");";
-			inits.add(code);
-
-			return "<table id=\"" + id + "\" class=\"display\"></table>";
-
-		}
-
-		public List<String> getInits() {
-			return inits;
-		}
+		return new WidgetInstance(id, html, code);
 
 	}
 

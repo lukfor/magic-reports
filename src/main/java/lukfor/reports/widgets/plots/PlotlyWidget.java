@@ -1,30 +1,16 @@
 package lukfor.reports.widgets.plots;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
 
-import lukfor.reports.HtmlReport;
 import lukfor.reports.data.DataWrapper;
-import lukfor.reports.widgets.IWidget;
-import lukfor.reports.widgets.WidgetRenderFunction;
+import lukfor.reports.widgets.AbstractWidget;
+import lukfor.reports.widgets.WidgetInstance;
 
-public class PlotlyWidget implements IWidget {
-
-	private RenderFunction renderFunction;
-
-	public PlotlyWidget(HtmlReport report) {
-		renderFunction = new RenderFunction(report);
-	}
+public class PlotlyWidget extends AbstractWidget {
 
 	@Override
 	public String getId() {
 		return "plotly";
-	}
-
-	@Override
-	public WidgetRenderFunction getRenderFunction() {
-		return renderFunction;
 	}
 
 	@Override
@@ -38,44 +24,19 @@ public class PlotlyWidget implements IWidget {
 	}
 
 	@Override
-	public String getInitializer() {
+	public WidgetInstance createInstance(HashMap<String, Object> config) {
 
-		String html = "";
-		for (String code : renderFunction.getInits()) {
-			html += code + "\n";
-		}
-		return html;
+		String id = createId();
 
-	}
+		String html = "<div id=\"" + id + "\"></div>";
 
-	public static class RenderFunction extends WidgetRenderFunction {
+		Object traces = config.get("traces");
+		Object layout = config.get("layout");
 
-		public RenderFunction(HtmlReport report) {
-			super(report);
-		}
+		String code = "Plotly.newPlot('" + id + "', " + new DataWrapper(traces).json() + ", "
+				+ new DataWrapper(layout).json() + ");";
 
-		private List<String> inits = new Vector<String>();;
-
-		@Override
-		public String render(HashMap<String, Object> config) {
-
-			String id = "magic_plot_" + inits.size();
-
-			Object traces = config.get("traces");
-			Object layout = config.get("layout");
-
-			String code = "Plotly.newPlot('" + id + "', " + new DataWrapper(traces).json() + ", "
-					+ new DataWrapper(layout).json() + ");";
-			inits.add(code);
-
-			return "<div id=\"" + id + "\"></div>";
-
-		}
-
-		public List<String> getInits() {
-			return inits;
-		}
-
+		return new WidgetInstance(id, html, code);
 	}
 
 }

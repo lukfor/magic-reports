@@ -20,6 +20,33 @@ Add the following dependency to your Maven Project:
 
 ## Create your first report
 
+### Html template
+
+
+### Generate report from Java
+
+```java
+HtmlReport report = new HtmlReport("/example");
+report.set("name", "Lukas");
+report.generate(new File("example.html"));
+```
+
+## Helpers
+
+### Javascript Helpers
+
+- `import_script("path_or_url/to/script.js")`
+- `array(object).extract("property")`
+- `json(object)`
+
+### CSS Helpers
+
+- `import_style("path_or_url/to/style.css")`
+
+### CSS Helpers
+
+- `import_style("path_or_url/to/style.css")`
+
 
 
 ## License

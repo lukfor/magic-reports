@@ -9,10 +9,10 @@ import lukfor.magic.reports.functions.IncludeStyleFunction;
 import lukfor.magic.reports.widgets.IWidget;
 import lukfor.magic.reports.widgets.WidgetFactory;
 
-public class MagicReport extends HtmlReport {
+public class HtmlWidgetsReport extends HtmlReport {
 	private List<IWidget> importedWidgets = new Vector<>();
 
-	public MagicReport(String inputDirectory) {
+	public HtmlWidgetsReport(String inputDirectory) {
 
 		super(inputDirectory);
 
@@ -23,7 +23,7 @@ public class MagicReport extends HtmlReport {
 			@Override
 			public String apply(String id) {
 
-				IWidget widget = WidgetFactory.createWidget(id, MagicReport.this);
+				IWidget widget = WidgetFactory.createWidget(id, HtmlWidgetsReport.this);
 				importedWidgets.add(widget);
 
 				// register render function

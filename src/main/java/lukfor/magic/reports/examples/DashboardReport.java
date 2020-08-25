@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
-import lukfor.magic.reports.MagicReport;
+import lukfor.magic.reports.HtmlWidgetsReport;
 
 public class DashboardReport {
 
@@ -20,7 +20,7 @@ public class DashboardReport {
 			persons.add(new Person("Max" + i, "Mustermann" + i, "max" + i + ".mustermann@mail.com"));
 		}
 
-		MagicReport report = new MagicReport("/dashboard");
+		HtmlWidgetsReport report = new HtmlWidgetsReport("/dashboard");
 		report.setSelfContained(true);
 		report.set("title", title);
 		report.set("persons", persons);

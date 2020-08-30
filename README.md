@@ -1,7 +1,8 @@
 # magic-reports
 
-> A java library to generate beautiful html reports
+> A java library to generate self-containing html reports and dashboards
 
+Reporting and data visualization is key in data science. `magic-reports` provides a simple template based library to create self-containing html reports.
 
 ## Installation
 
@@ -20,15 +21,85 @@ Or include it as a dependency in your Gradle project:
 
 ## Create your first report
 
-### Html template
-
-
-### Generate report from Java
-
 ```java
-HtmlReport report = new HtmlReport("/example");
-report.set("name", "Lukas");
+
+List<Person> persons = ...;
+
+HtmlWidgetReport report = new HtmlWidgetReport("/example");
+report.set("persons", persons);
 report.generate(new File("example.html"));
+```
+
+## Widgets
+
+### datatables
+
+```
+{{import_widget("data_table")}}
+```
+
+```
+{{
+	data_table({
+		columns: [
+		   		{data: "firstName", title: "First Name"},
+		   		{data: "lastName", title: "Last Name"},
+		   		{data: "email", title: "E-Mail"}
+		],
+		data: persons
+	})
+}}
+```
+
+### plotly
+
+```
+{{import_widget("plotly")}}
+```
+
+```
+{{
+	plotly({
+		traces: [{
+		  x: array(persons).extract("age"),
+		  y: array(persons).extract("salary"),
+		  mode: "markers",
+		  type: "scatter"
+		}],
+		layout: {
+			plot_bgcolor: "rgba(255,255,255,1)"
+		}
+	})
+}}
+```
+
+### vega-lite
+
+```
+{{import_widget("vega_lite")}}
+```
+
+```
+{{
+  vega_lite({
+      $schema: "https://vega.github.io/schema/vega-lite/v4.json",
+      data: {
+        values: {{json(persons)}}
+      },
+      mark: "point",
+      encoding: {
+        x: {
+          field: "age",
+          type: "quantitative"
+        },
+        y: {
+          field: "salary",
+          type: "quantitative"
+        }
+      },
+      width: 1000
+  })
+}}
 ```
 
 ## Helpers

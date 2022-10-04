@@ -44,9 +44,9 @@
 
 	<distributionManagement>
 		<repository>
-			<id>bintray-lukfor-maven</id>
-			<name>lukfor-maven</name>
-			<url>https://api.bintray.com/maven/lukfor/maven/magic-reports/;publish=1</url>
+			<id>jfrog-genepi-maven</id>
+			<name>jfrog-genepi-maven</name>
+			<url>https://genepi.jfrog.io/artifactory/maven/</url>
 		</repository>
 	</distributionManagement>
 

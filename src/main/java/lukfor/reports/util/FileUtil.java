@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 public class FileUtil {
 
@@ -15,8 +16,9 @@ public class FileUtil {
 		return bytes;
 	}
 
-	public static byte[] readBytesFromClasspath(String path) throws IOException {
-		InputStream in = FileUtil.class.getResourceAsStream(path);
+	public static byte[] readBytesFromClasspath(String path) throws IOException {		
+		String resolvedPath = resolvePath(path);		
+		InputStream in = FileUtil.class.getResourceAsStream(resolvedPath);
 		byte[] bytes = readBytes(in);
 		in.close();
 		return bytes;
@@ -61,6 +63,14 @@ public class FileUtil {
 			}
 		}
 		return folder.delete();
+	}
+	
+	
+	public static String resolvePath(String path) {
+		String filename = new File(path).getName();				
+		URI uri = URI.create(path);
+		String resolvedPath =  uri.resolve("").toString() + filename;
+		return resolvedPath;
 	}
 
 }

@@ -1,14 +1,18 @@
 package lukfor.reports;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
+import io.marioslab.basis.template.Error;
 import io.marioslab.basis.template.Template;
 import io.marioslab.basis.template.TemplateContext;
 import io.marioslab.basis.template.TemplateLoader;
-import io.marioslab.basis.template.TemplateLoader.ClasspathTemplateLoader;
+import io.marioslab.basis.template.TemplateLoader.CachingTemplateLoader;
+import io.marioslab.basis.template.parsing.Span;
 import lukfor.reports.functions.ArrayHelperFunction;
 import lukfor.reports.functions.ImageFunction;
 import lukfor.reports.functions.ImageUrlFunction;
@@ -39,7 +43,7 @@ public class HtmlReport {
 
 	public HtmlReport(String inputDirectory) {
 		this.inputDirectory = inputDirectory;
-		this.loader = new ClasspathTemplateLoader();
+		this.loader = new MyClasspathTemplateLoader();
 		this.context = new TemplateContext();
 	}
 
@@ -143,6 +147,35 @@ public class HtmlReport {
 
 		System.out.println("HTML Report written to " + outputFile.getAbsolutePath() + ".");
 
+	}
+	
+	/** A TemplateLoader to load templates from the classpath. Extended to support relative paths with ../ **/
+	public static class MyClasspathTemplateLoader extends CachingTemplateLoader {
+		@Override
+		protected Source loadSource (String path) {
+			try {
+
+				String resolvedPath = FileUtil.resolvePath(path);
+				
+				return new Source(path, MyStreamUtils.readString(MyClasspathTemplateLoader.class.getResourceAsStream(resolvedPath)));
+			} catch (Throwable t) {
+				t.printStackTrace();
+				Error.error("Couldn't load template '" + path + "'.", new Span(new Source(path, " "), 0, 0), t);
+				throw new RuntimeException(""); // never reached
+			}
+		}
+	}
+	
+	static class MyStreamUtils {
+		private static String readString (InputStream in) throws IOException {
+			byte[] buffer = new byte[1024 * 10];
+			int read = 0;
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			while ((read = in.read(buffer)) != -1) {
+				out.write(buffer, 0, read);
+			}
+			return new String(out.toByteArray(), "UTF-8");
+		}
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import lukfor.reports.data.DataWrapper;
 import lukfor.reports.widgets.AbstractWidget;
+import lukfor.reports.widgets.HtmlNode;
 import lukfor.reports.widgets.WidgetInstance;
 
 public class VegaLiteWidget extends AbstractWidget {
@@ -28,7 +29,9 @@ public class VegaLiteWidget extends AbstractWidget {
 	public WidgetInstance createInstance(HashMap<String, Object> spec) {
 
 		String id = createId();
-		String html = "<div id=\"" + id + "\"></div>";
+		HtmlNode html = new HtmlNode("div");
+		html.setAttribute("id", id);
+
 		String code = "vegaEmbed('#" + id + "', " + new DataWrapper(spec).json() + ");";
 
 		return new WidgetInstance(id, html, code);

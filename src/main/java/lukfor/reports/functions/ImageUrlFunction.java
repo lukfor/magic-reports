@@ -39,13 +39,19 @@ public class ImageUrlFunction implements Function<String, String> {
 						mimeType = "image/svg+xml";
 					}
 
-					byte[] bytes = report.getBytes(url);
+					byte[] bytes = null;
+					
+					if (url.startsWith("file://")) {
+						bytes =  FileUtil.readBytesFromFile(url.replaceAll("file://", ""));;
+					}else {
+						bytes =report.getBytes(url);
+					}
 					String encodedContent = FileUtil.encodeBase64(mimeType, bytes);
 
 					return encodedContent;
 
 				} catch (Exception e) {
-
+e.printStackTrace();
 					throw new RuntimeException(e);
 
 				}

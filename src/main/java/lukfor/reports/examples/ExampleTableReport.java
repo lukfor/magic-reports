@@ -16,16 +16,18 @@ public class ExampleTableReport {
 
 		List<Person> persons = new Vector<Person>();
 
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			persons.add(new Person("Max" + i, "Mustermann" + i, "max" + i + ".mustermann@mail.com"));
 		}
 
-		HtmlReport report = new HtmlReport("/example-tables");
+		HtmlReport report = new HtmlReport("/example-tables-2");
 		report.setSelfContained(true);
+		report.set("application", "Test-App");
+		report.set("version", "1.0.0");
 		report.set("title", title);
 		report.set("persons", persons);
 
-		report.generate(new File("example-tables.html"));
+		report.generate(new File("example-tables-2.html"));
 	}
 
 	public static class Person {

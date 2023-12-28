@@ -7,11 +7,11 @@ import lukfor.reports.widgets.tables.DataTableWidget;
 
 public class WidgetFactory {
 
-	public static IWidget createWidget(String id, HtmlReport report) {
+	public static IWidget createWidget(String id) {
 
 		switch (id) {
 
-		case "data_table":
+		case "datatable":
 			return new DataTableWidget();
 
 		case "plotly":

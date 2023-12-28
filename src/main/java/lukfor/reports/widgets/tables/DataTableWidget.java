@@ -2,15 +2,17 @@ package lukfor.reports.widgets.tables;
 
 import java.util.HashMap;
 
+import groovy.lang.Closure;
 import lukfor.reports.data.DataWrapper;
 import lukfor.reports.widgets.AbstractWidget;
+import lukfor.reports.widgets.HtmlNode;
 import lukfor.reports.widgets.WidgetInstance;
 
 public class DataTableWidget extends AbstractWidget {
 
 	@Override
 	public String getId() {
-		return "data_table";
+		return "datatable";
 	}
 
 	@Override
@@ -26,9 +28,12 @@ public class DataTableWidget extends AbstractWidget {
 
 	@Override
 	public WidgetInstance createInstance(HashMap<String, Object> config) {
+		String id = createId();
 
-		String id = createId();		
-		String html = "<table id=\"" + id + "\" class=\"display\"></table>";
+		HtmlNode html = new HtmlNode("table");
+		html.setAttribute("id", id);
+		html.setAttribute("class", "display");
+
 		String code = "$('#" + id + "').DataTable(" + new DataWrapper(config).json() + ");";
 
 		return new WidgetInstance(id, html, code);

@@ -4,11 +4,11 @@ public class WidgetInstance {
 
 	private String id;
 
-	private String html = "";
+	private HtmlNode html = null;
 
 	private String script = "";
 
-	public WidgetInstance(String id, String html, String script) {
+	public WidgetInstance(String id, HtmlNode html, String script) {
 		this.id = id;
 		this.html = html;
 		this.script = script;
@@ -18,7 +18,7 @@ public class WidgetInstance {
 		return id;
 	}
 
-	public String getHtml() {
+	public HtmlNode getHtml() {
 		return html;
 	}
 

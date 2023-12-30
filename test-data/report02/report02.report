@@ -26,26 +26,22 @@ report {
 
 
 
-    content1 {
-
+    content {
         h2 "Plotly"
         p "This is a description"
-        plotly (
-            traces: [
+        plotly {
+            traces = [
                 [
                   x: age,
                   y: salary,
                   mode: "markers",
                   type: "scatter"
                 ]
-            ],
-            layout: [
+            ]
+            layout = [
                plot_bgcolor: "rgba(255,255,255,1)"
             ]
-        )
-    }
-
-    content {
+        }
 
         h2 "Plotly 2"
         p "This is a description 2"

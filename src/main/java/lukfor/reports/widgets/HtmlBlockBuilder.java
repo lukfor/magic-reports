@@ -9,6 +9,8 @@ import lukfor.reports.widgets.HtmlNode;
 import lukfor.reports.widgets.IWidget;
 import lukfor.reports.widgets.WidgetFactory;
 import lukfor.reports.widgets.WidgetInstance;
+import lukfor.reports.widgets.plots.PlotlyConfig;
+import lukfor.reports.widgets.tables.DataTableConfig;
 
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -36,12 +38,37 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 		invokeMethod("div",  new Object[]{attributes, closure});
 	}
 
+	public void markdown(String markdown) {
+		invokeMethod("div", "LL" + markdown);
+	}
+
+
+	public void plotly(Closure closure) {
+		PlotlyConfig plotlyConfig = new PlotlyConfig();
+		closure.setDelegate(plotlyConfig);
+		closure.setResolveStrategy(Closure.DELEGATE_FIRST);
+		closure.call();
+		widget("plotly", plotlyConfig.getMap());
+	}
+
 	public void plotly(HashMap<String, Object> config) {
 		widget("plotly", config);
 	}
 
+	public void datatable(Closure closure) {
+		DataTableConfig dataTableConfig = new DataTableConfig();
+		closure.setDelegate(dataTableConfig);
+		closure.setResolveStrategy(Closure.DELEGATE_FIRST);
+		closure.call();
+		widget("datatable", dataTableConfig.getMap());
+	}
+
 	public void datatable(HashMap<String, Object> config) {
 		widget("datatable", config);
+	}
+
+	public void vegalite(HashMap<String, Object> config) {
+		widget("vega_lite", config);
 	}
 
 	public void widget(String name, HashMap<String, Object> config){

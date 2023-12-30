@@ -53,6 +53,18 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>tech.tablesaw</groupId>
+			<artifactId>tablesaw-core</artifactId>
+			<version>0.43.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>tech.tablesaw</groupId>
+			<artifactId>tablesaw-json</artifactId>
+			<version>0.43.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
 			<version>3.0.9</version>

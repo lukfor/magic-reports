@@ -6,30 +6,16 @@
 <title>{{title}}</title>
 {{import_style("css/github-markdown.min.css")}}
 {{import_style("css/index.css")}}
-
-<style>
-			body {
-				box-sizing: border-box;
-				min-width: 200px;
-				max-width: 980px;
-				margin: 0 auto;
-				padding: 45px;
-			}
-		</style>
 {{head}}
 </head>
+
 <body>
 <article class="markdown-body">
       <h1>{{title}}</h1>
-	  {{header}}
-	{{content1}}
       {{content}}
 </article>
-<ul>
-	{{for a in myage}}
-	<li>{{a}}</li>
-	{{end}}
-</ul>
+
+{{import_script("js/jquery-3.7.1.min.js")}}
 {{script}}
 
 </body>

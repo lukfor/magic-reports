@@ -22,6 +22,7 @@ public class RenderCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
+        ReportBuilder.setScript(input);
         HtmlWidgetsReport report = ReportBuilder.parse(input);
         report.render(output);
         return 0;

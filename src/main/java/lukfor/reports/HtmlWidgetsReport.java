@@ -30,9 +30,15 @@ public class HtmlWidgetsReport implements GroovyObject {
 
 	private String title = "Report";
 
-	private String template = "/report";
+	private String templateDirectory = "/default";
+
+	private String templateIndex= "index.html";
+
+	private boolean useClassPath = true;
 
 	private boolean selfContained = true;
+
+	private File file;
 
 	private Map<String, Object> variables = new HashMap<>();
 
@@ -48,8 +54,47 @@ public class HtmlWidgetsReport implements GroovyObject {
 		this.selfContained = selfContained;
 	}
 
+	public void setFile(File file) {
+		this.file = file;
+	}
+
 	public void template(String template){
-		this.template = template;
+		this.templateDirectory = template;
+	}
+
+	public void template(File template){
+		if (template.isAbsolute()){
+			templateDirectory = template.getAbsoluteFile().getParent();
+		} else {
+			String relativeTemplateDirectory = template.getParent();
+			templateDirectory = file.getAbsoluteFile().getParent() + "/" + relativeTemplateDirectory;
+		}
+		templateIndex = template.getName();
+		this.useClassPath = false;
+	}
+
+	public File file(Map<String, Object> params, String filename){
+		File result = new File(filename);
+		if (!result.isAbsolute()){
+			result = new File(file.getAbsoluteFile().getParent(), result.getPath());
+		}
+		boolean checkIfExists = (boolean)params.getOrDefault("checkIfExists",false);
+		if (checkIfExists && !result.exists()){
+			throw new RuntimeException("File '" + filename + "' not found.");
+		}
+		return result;
+	}
+
+	public File file(String filename){
+		return file(new HashMap<String, Object>(), filename);
+	}
+
+	public File path(String filename){
+		return path(new HashMap<String, Object>(), filename);
+	}
+
+	public File path(Map<String, Object> params, String filename){
+		return file(params, filename);
 	}
 
 	public HtmlBlock addBlock(String name, Closure closure){
@@ -60,7 +105,9 @@ public class HtmlWidgetsReport implements GroovyObject {
 	}
 
 	public void render(File output) throws IOException {
-		HtmlReport report = new HtmlReport(template);
+
+		HtmlReport report = new HtmlReport(templateDirectory, useClassPath);
+		report.setMainFilename(templateIndex);
 		report.setSelfContained(selfContained);
 		report.set("title", title);
 		report.set("head", getHead(report));
@@ -166,7 +213,7 @@ public class HtmlWidgetsReport implements GroovyObject {
 			if (list.isEmpty()){
 				throw e;
 			} else if (list.size() > 1){
-				throw new RuntimeException("More than one parameter");
+				throw new RuntimeException("Parameter '" + name + "'. More than one parameter: " + list);
 			}
 			Object arg = list.get(0);
 			if (arg instanceof  Closure){

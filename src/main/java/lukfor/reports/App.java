@@ -13,7 +13,7 @@ public class App {
 
     public static String[] args;
 
-    public int run(String[] args) {
+    public int run(String... args) {
 
         App.args = args;
 

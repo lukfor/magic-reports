@@ -12,8 +12,15 @@ import java.io.IOException;
 
 public class ReportBuilder {
 
+    private static File script;
+
+    public static void setScript(File script) {
+        ReportBuilder.script = script;
+    }
+
     public static HtmlWidgetsReport report(final Closure closure) throws IOException {
         HtmlWidgetsReport report = new HtmlWidgetsReport();
+        report.setFile(script);
         closure.setDelegate(report);
         closure.call();
         return report;
@@ -29,7 +36,10 @@ public class ReportBuilder {
         compilerConfiguration.addCompilationCustomizers(customizer);
 
         GroovyShell shell = new GroovyShell(ReportBuilder.class.getClassLoader(), compilerConfiguration);
-        return (HtmlWidgetsReport) shell.evaluate(script);
+        HtmlWidgetsReport report = (HtmlWidgetsReport) shell.evaluate(script);
+        report.setFile(script);
+
+        return report;
 
     }
 

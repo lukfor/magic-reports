@@ -41,11 +41,27 @@ public class HtmlReport {
 
 	private HtmlReportAssets assets;
 
+	public HtmlReport(File inputDirectory) {
+		this(inputDirectory.getAbsolutePath(), false);
+	}
+
 	public HtmlReport(String inputDirectory) {
+		this(inputDirectory, true);
+	}
+
+	public HtmlReport(String inputDirectory, boolean useClasspath) {
+		this.useClasspath = useClasspath;
 		this.inputDirectory = inputDirectory;
-		this.loader = new MyClasspathTemplateLoader();
+		if (useClasspath) {
+			System.out.println("Template Loader: Classpath");
+			this.loader = new MyClasspathTemplateLoader();
+		}else{
+			System.out.println("Template Loader: Files");
+			this.loader = new TemplateLoader.FileTemplateLoader();
+		}
 		this.context = new TemplateContext();
 	}
+
 
 	public void set(String name, Object value) {
 		this.context.set(name, value);
@@ -61,10 +77,6 @@ public class HtmlReport {
 
 	public boolean isSelfContained() {
 		return selfContained;
-	}
-
-	public void setUseClasspath(boolean useClasspath) {
-		this.useClasspath = useClasspath;
 	}
 
 	public boolean isUseClasspath() {
@@ -116,8 +128,11 @@ public class HtmlReport {
 	}
 	
 	public void generate(File outputFile) throws IOException {
-
-		System.out.println("Process file " + inputDirectory + "/" + mainFilename + "...");
+		if (useClasspath) {
+			System.out.println("Process resource " + inputDirectory + "/" + mainFilename + "...");
+		}else {
+			System.out.println("Process file " + inputDirectory + "/" + mainFilename + "...");
+		}
 
 		createdOn = new Date();
 

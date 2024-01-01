@@ -19,6 +19,14 @@ public class RenderCommandTest extends TestCase {
 		assertEquals(0, exitCode);
 	}
 
+
+	public void testWithParam() throws Exception {
+		App app = new App();
+		int exitCode = app.run("render","-i","test-data/report03/report03.report","-o","report03.html","--name","World");
+		assertEquals(0, exitCode);
+	}
+
+
 	public void testExample() throws Exception {
 		App app = new App();
 		int exitCode = app.run("render","-i","examples/iris.report","-o","examples/iris.html");

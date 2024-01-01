@@ -1,0 +1,9 @@
+report {
+
+	title "Dashboard"
+
+    content {
+        h2 "Hello ${params.name}"
+    }
+
+}

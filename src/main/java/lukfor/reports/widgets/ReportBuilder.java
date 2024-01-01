@@ -1,6 +1,5 @@
 package lukfor.reports.widgets;
 
-import lukfor.reports.HtmlReport;
 import lukfor.reports.HtmlWidgetsReport;
 import groovy.lang.Closure;
 import groovy.lang.GroovyShell;
@@ -9,6 +8,7 @@ import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 public class ReportBuilder {
 
@@ -26,16 +26,16 @@ public class ReportBuilder {
         return report;
     }
 
-    public static HtmlWidgetsReport parse(File script) throws Exception {
+    public static HtmlWidgetsReport parse(File script, Map<String, String> params) throws Exception {
 
         ImportCustomizer customizer = new ImportCustomizer();
         customizer.addStaticImport("lukfor.reports.widgets.ReportBuilder", "report");
-        customizer.addStaticImport("lukfor.reports.widgets.ReportBuilder", "report2");
 
         CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
         compilerConfiguration.addCompilationCustomizers(customizer);
 
         GroovyShell shell = new GroovyShell(ReportBuilder.class.getClassLoader(), compilerConfiguration);
+        shell.setProperty("params", params);
         HtmlWidgetsReport report = (HtmlWidgetsReport) shell.evaluate(script);
         report.setFile(script);
 

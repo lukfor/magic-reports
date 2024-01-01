@@ -22,10 +22,8 @@ report {
 	myage age
 
     header {
-        p "Lukas <b>Forer</b>"
+        p mkp.yieldUnescaped("Lukas <b>Forer</b>")
     }
-
-
 
     content1 {
 

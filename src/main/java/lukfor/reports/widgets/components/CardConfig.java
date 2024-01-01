@@ -33,14 +33,15 @@ public class CardConfig implements IWidgetConfig {
         body = block.getContent();
     }
 
-   public String getHtml(){
-        String html = "<div class=\"card\"><h4>" + title + "</h4>";
-        if (description != null){
-            html += "<p>" + description + "</p>";
-        }
-        html += body + "</div>";
-        return html;
-   }
+    public String getTitle() {
+        return title;
+    }
 
+    public String getDescription() {
+        return description;
+    }
 
+    public String getBody() {
+        return body;
+    }
 }

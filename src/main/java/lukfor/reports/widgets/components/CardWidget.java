@@ -1,21 +1,22 @@
-package lukfor.reports.widgets.plots;
-
-import java.util.HashMap;
+package lukfor.reports.widgets.components;
 
 import groovy.lang.Closure;
 import lukfor.reports.HtmlWidgetsReport;
 import lukfor.reports.data.DataWrapper;
 import lukfor.reports.widgets.AbstractWidget;
+import lukfor.reports.widgets.plots.PlotlyConfig;
 
-public class PlotlyWidget extends AbstractWidget {
+import java.util.HashMap;
 
-	public static final String KEYWORD = "plotly";
+public class CardWidget extends AbstractWidget {
+
+	public static final String KEYWORD = "card";
 
 	private String id;
 
-	private PlotlyConfig config;
+	private CardConfig config;
 
-	public PlotlyWidget() {
+	public CardWidget() {
 		id = createId(KEYWORD);
 	}
 
@@ -26,7 +27,7 @@ public class PlotlyWidget extends AbstractWidget {
 
 	@Override
 	public void init(HtmlWidgetsReport report, Closure closure) {
-		config = new PlotlyConfig();
+		config = new CardConfig(report);
 		closure.setDelegate(config);
 		closure.setResolveStrategy(Closure.DELEGATE_FIRST);
 		closure.call();
@@ -34,18 +35,22 @@ public class PlotlyWidget extends AbstractWidget {
 
 	@Override
 	public void init(HtmlWidgetsReport report, HashMap<String, Object> options) {
-		throw new RuntimeException("Not supported! please use plotly{}");
+		throw new RuntimeException("Not supported! please use card{}");
 	}
 
 	@Override
 	public String getHtml() {
-		return "<div id=\"" + id + "\"></div>";
+		String html = "<div class=\"card\"><h4>" + config.getTitle() + "</h4>";
+		if (config.getDescription() != null){
+			html += "<p>" + config.getDescription() + "</p>";
+		}
+		html += config.getBody() + "</div>";
+		return html;
 	}
 
 	@Override
 	public String getInitScript() {
-		return "Plotly.newPlot('" + id + "', " + new DataWrapper(config.getTraces()).json() + ", "
-				+ new DataWrapper(config.getLayout()).json() + ");";
+		return "";
 	}
 
 	@Override

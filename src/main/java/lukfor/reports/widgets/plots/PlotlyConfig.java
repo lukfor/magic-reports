@@ -10,9 +10,9 @@ import java.util.Vector;
 
 public class PlotlyConfig implements IWidgetConfig {
 
-    List<HashMap<String, Object>> traces = new Vector<HashMap<String, Object>>();
+    private List<HashMap<String, Object>> traces = new Vector<HashMap<String, Object>>();
 
-    Map<String, Object> layout = new HashMap<String, Object>();
+    private Map<String, Object> layout = new HashMap<String, Object>();
 
     public void trace(HashMap<String, Object> params){
         traces.add(params);
@@ -51,4 +51,11 @@ public class PlotlyConfig implements IWidgetConfig {
         traces.add(defaultParams);
     }
 
+    public List<HashMap<String, Object>> getTraces() {
+        return traces;
+    }
+
+    public Map<String, Object> getLayout() {
+        return layout;
+    }
 }

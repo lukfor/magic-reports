@@ -2,11 +2,11 @@ package lukfor.reports.widgets;
 
 public abstract class AbstractWidget implements IWidget {
 
-	private int instances;
+	private static int instances;
 	
-	protected String createId() {
+	protected String createId(String name) {
 		instances++;
-		return "widget_" + getId() + "_" + instances;
+		return "widget_" + name + "_" + instances;
 	}
 	
 }

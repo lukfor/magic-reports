@@ -16,15 +16,13 @@ import lukfor.reports.functions.IncludeScriptFunction;
 import lukfor.reports.functions.IncludeStyleFunction;
 import lukfor.reports.widgets.HtmlBlock;
 import lukfor.reports.widgets.IWidget;
-import lukfor.reports.widgets.WidgetFactory;
-import lukfor.reports.widgets.WidgetInstance;
 import org.codehaus.groovy.runtime.InvokerHelper;
 
 public class HtmlWidgetsReport implements GroovyObject {
 
 	protected Map<String, IWidget> importedWidgets = new HashMap<String, IWidget>();
 
-	private List<WidgetInstance> instances = new Vector<WidgetInstance>();
+	private List<IWidget> instances = new Vector<IWidget>();
 
 	private List<HtmlBlock> blocks = new Vector<HtmlBlock>();
 
@@ -118,22 +116,18 @@ public class HtmlWidgetsReport implements GroovyObject {
 		report.generate(output);
 	}
 
-	public IWidget importWidget(String id) {
-		IWidget widget = importedWidgets.get(id);
-		if (widget == null) {
-			widget = WidgetFactory.createWidget(id);
-			importedWidgets.put(id, widget);
-		}
-		return widget;
+	private void importWidget(IWidget widget) {
+        importedWidgets.putIfAbsent(widget.getKeyword(), widget);
 	}
 
-	public void addInstance(WidgetInstance instance){
-		instances.add(instance);
+	public void addWidget(IWidget widget){
+		importedWidgets.putIfAbsent(widget.getKeyword(), widget);
+		instances.add(widget);
 	}
 
 	protected String getHead(HtmlReport report, IWidget widget) {
 		final IncludeStyleFunction styleFunction = new IncludeStyleFunction(report);
-		StringBuilder html = new StringBuilder("<!-- Widget: " + widget.getId() + " -->\n");
+		StringBuilder html = new StringBuilder("<!-- Widget: " + widget.getKeyword() + " -->\n");
 		for (String style : widget.getStyles()) {
 			html.append(styleFunction.apply(style)).append("\n");
 		}
@@ -157,7 +151,7 @@ public class HtmlWidgetsReport implements GroovyObject {
 
 		for (IWidget widget : importedWidgets.values()) {
 			html.append("\n");
-			html.append("<!-- Widget: ").append(widget.getId()).append(" -->\n");
+			html.append("<!-- Widget: ").append(widget.getKeyword()).append(" -->\n");
 			for (String script : widget.getScripts()) {
 				html.append(scriptFunction.apply(script)).append("\n");
 			}
@@ -167,9 +161,9 @@ public class HtmlWidgetsReport implements GroovyObject {
 		html.append("<!-- Init Widgets -->\n");
 		html.append("<script>\n");
 		html.append("$(document).ready( function () {\n");
-		for (WidgetInstance instance : instances) {
+		for (IWidget instance : instances) {
 			html.append("\n");
-			html.append(instance.getScript());
+			html.append(instance.getInitScript());
 		}
 		html.append("});\n");
 		html.append("</script>");

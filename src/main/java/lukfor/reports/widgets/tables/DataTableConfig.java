@@ -62,7 +62,7 @@ public class DataTableConfig implements IWidgetConfig {
         this.columns = columns;
     }
 
-    public HashMap<String, Object> getMap() {
+    public HashMap<String, Object> getOptions() {
         if (data == null) {
             throw new RuntimeException("Please specify `data`.");
         }

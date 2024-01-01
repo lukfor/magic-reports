@@ -20,29 +20,6 @@ report {
 	description "test.lukas -> ${age}"
 	myage age
 
-    header {
-        p "Lukas <b>Forer</b>"
-    }
-
-
-
-    content1 {
-
-        h2 "Plotly"
-        p "This is a description"
-        plotly {
-            trace (
-                  x: age,
-                  y: salary,
-                  mode: "markers",
-                  type: "scatter"
-            )
-            layout (
-               plot_bgcolor: "rgba(255,255,255,1)"
-            )
-        }
-    }
-
     content {
 
         h2 "Plotly 2"

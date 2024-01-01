@@ -4,8 +4,11 @@ import groovy.lang.Closure;
 import groovy.xml.MarkupBuilder;
 import lukfor.reports.HtmlWidgetsReport;
 import lukfor.reports.widgets.components.CardConfig;
+import lukfor.reports.widgets.components.CardWidget;
 import lukfor.reports.widgets.plots.PlotlyConfig;
+import lukfor.reports.widgets.plots.PlotlyWidget;
 import lukfor.reports.widgets.tables.DataTableConfig;
+import lukfor.reports.widgets.tables.DataTableWidget;
 
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -32,50 +35,44 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 	}
 
 	public void plotly(Closure closure) {
-		PlotlyConfig plotlyConfig = new PlotlyConfig();
-		closure.setDelegate(plotlyConfig);
-		closure.setResolveStrategy(Closure.DELEGATE_FIRST);
-		closure.call();
-		widget("plotly", plotlyConfig.getMap());
+		PlotlyWidget widget = new PlotlyWidget();
+		widget.init(report, closure);
+		widget(widget);
 	}
 
 	public void plotly(HashMap<String, Object> config) {
-		throw new RuntimeException("Not supported! please use plotly{}");
+		PlotlyWidget widget = new PlotlyWidget();
+		widget.init(report, config);
+		widget(widget);
 	}
 
 	public void datatable(Closure closure) {
-		throw new RuntimeException("Not supported! please use datatable()");
+		DataTableWidget widget = new DataTableWidget();
+		widget.init(report, closure);
+		widget(widget);
 	}
 
 	public void datatable(HashMap<String, Object> config) {
-		DataTableConfig dataTableConfig = new DataTableConfig(config);
-		widget("datatable", dataTableConfig.getMap());
+		DataTableWidget widget = new DataTableWidget();
+		widget.init(report, config);
+		widget(widget);
 	}
 
-
 	public void card(Closure closure) {
-		CardConfig cardConfig = new CardConfig(report);
-		closure.setDelegate(cardConfig);
-		closure.setResolveStrategy(Closure.DELEGATE_ONLY);
-		closure.call();
-		//doInvokeMethod("div", "div", new Object[0]);
-		getMkp().yieldUnescaped(cardConfig.getHtml());
+		CardWidget widget = new CardWidget();
+		widget.init(report, closure);
+		widget(widget);
 	}
 
 	public void card(HashMap<String, Object> config) {
-		throw new RuntimeException("Not supported! please use card{}");
+		CardWidget widget = new CardWidget();
+		widget.init(report, config);
+		widget(widget);
 	}
 
-
-	public void vegalite(HashMap<String, Object> config) {
-		widget("vega_lite", config);
-	}
-
-	public void widget(String name, HashMap<String, Object> config){
-		IWidget widget = report.importWidget(name);
-		WidgetInstance instance = widget.createInstance(config);
-		report.addInstance(instance);
-		String html = instance.getHtml();
+	public void widget(IWidget widget){
+		report.addWidget(widget);
+		String html = widget.getHtml();
 		if (html != null) {
 			getMkp().yieldUnescaped(html);
 		}

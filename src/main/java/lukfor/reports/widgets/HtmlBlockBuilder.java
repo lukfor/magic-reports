@@ -3,20 +3,13 @@ package lukfor.reports.widgets;
 import groovy.lang.Closure;
 import groovy.xml.MarkupBuilder;
 import lukfor.reports.HtmlWidgetsReport;
-import lukfor.reports.functions.IncludeScriptFunction;
-import lukfor.reports.functions.IncludeStyleFunction;
-import lukfor.reports.widgets.HtmlNode;
-import lukfor.reports.widgets.IWidget;
-import lukfor.reports.widgets.WidgetFactory;
-import lukfor.reports.widgets.WidgetInstance;
+import lukfor.reports.widgets.components.CardConfig;
 import lukfor.reports.widgets.plots.PlotlyConfig;
 import lukfor.reports.widgets.tables.DataTableConfig;
 
 import java.io.StringWriter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 public class HtmlBlockBuilder extends MarkupBuilder {
 
@@ -38,11 +31,6 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 		invokeMethod("div",  new Object[]{attributes, closure});
 	}
 
-	public void markdown(String markdown) {
-		invokeMethod("div", "LL" + markdown);
-	}
-
-
 	public void plotly(Closure closure) {
 		PlotlyConfig plotlyConfig = new PlotlyConfig();
 		closure.setDelegate(plotlyConfig);
@@ -52,20 +40,32 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 	}
 
 	public void plotly(HashMap<String, Object> config) {
-		widget("plotly", config);
+		throw new RuntimeException("Not supported! please use plotly{}");
 	}
 
 	public void datatable(Closure closure) {
-		DataTableConfig dataTableConfig = new DataTableConfig();
-		closure.setDelegate(dataTableConfig);
-		closure.setResolveStrategy(Closure.DELEGATE_FIRST);
-		closure.call();
-		widget("datatable", dataTableConfig.getMap());
+		throw new RuntimeException("Not supported! please use datatable()");
 	}
 
 	public void datatable(HashMap<String, Object> config) {
-		widget("datatable", config);
+		DataTableConfig dataTableConfig = new DataTableConfig(config);
+		widget("datatable", dataTableConfig.getMap());
 	}
+
+
+	public void card(Closure closure) {
+		CardConfig cardConfig = new CardConfig(report);
+		closure.setDelegate(cardConfig);
+		closure.setResolveStrategy(Closure.DELEGATE_ONLY);
+		closure.call();
+		//doInvokeMethod("div", "div", new Object[0]);
+		getMkp().yieldUnescaped(cardConfig.getHtml());
+	}
+
+	public void card(HashMap<String, Object> config) {
+		throw new RuntimeException("Not supported! please use card{}");
+	}
+
 
 	public void vegalite(HashMap<String, Object> config) {
 		widget("vega_lite", config);
@@ -75,9 +75,9 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 		IWidget widget = report.importWidget(name);
 		WidgetInstance instance = widget.createInstance(config);
 		report.addInstance(instance);
-		HtmlNode node = instance.getHtml();
-		if (node != null) {
-			doInvokeMethod(node.getTag(), node.getTag(), new Object[]{node.getAttributes()});
+		String html = instance.getHtml();
+		if (html != null) {
+			getMkp().yieldUnescaped(html);
 		}
 	}
 

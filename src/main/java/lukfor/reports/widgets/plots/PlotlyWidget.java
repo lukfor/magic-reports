@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import lukfor.reports.data.DataWrapper;
 import lukfor.reports.widgets.AbstractWidget;
-import lukfor.reports.widgets.HtmlNode;
 import lukfor.reports.widgets.WidgetInstance;
 
 public class PlotlyWidget extends AbstractWidget {
@@ -26,10 +25,10 @@ public class PlotlyWidget extends AbstractWidget {
 
 	@Override
 	public WidgetInstance createInstance(HashMap<String, Object> config) {
+
 		String id = createId();
 
-		HtmlNode html = new HtmlNode("div");
-		html.setAttribute("id", id);
+		String html = "<div id=\"" + id + "\"></div>";
 
 		Object traces = config.get("traces");
 		Object layout = config.get("layout");

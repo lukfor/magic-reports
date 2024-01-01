@@ -26,38 +26,38 @@ report {
 
 
 
-    content {
+    content1 {
+
         h2 "Plotly"
         p "This is a description"
         plotly {
-            traces = [
-                [
+            trace (
                   x: age,
                   y: salary,
                   mode: "markers",
                   type: "scatter"
-                ]
-            ]
-            layout = [
+            )
+            layout (
                plot_bgcolor: "rgba(255,255,255,1)"
-            ]
+            )
         }
+    }
+
+    content {
 
         h2 "Plotly 2"
         p "This is a description 2"
-        plotly (
-            traces: [
-                [
+        plotly {
+            trace (
                   x: age.reverse(),
                   y: salary,
                   mode: "markers",
                   type: "scatter"
-                ]
-            ],
-            layout: [
+            )
+            layout (
                plot_bgcolor: "rgba(255,255,255,1)"
-            ]
-        )
+            )
+        }
 
         h2 "Table"
         p "This is a description of the table"
@@ -70,20 +70,17 @@ report {
         )
 
         h2 "Plotly2"
-        plotly (
-            traces: [
-                [
+        plotly {
+            trace (
                   x: age,
                   y: salary,
                   mode: "markers",
                   type: "scatter"
-                ]
-            ],
-            layout: [
+            )
+            layout (
                plot_bgcolor: "rgba(255,255,255,1)"
-            ]
-        )
+            )
+        }
 
     }
-
 }

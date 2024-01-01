@@ -1,13 +1,14 @@
 package lukfor.reports.widgets.plots;
 
 import groovy.lang.Closure;
+import lukfor.reports.widgets.IWidgetConfig;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-public class PlotlyConfig {
+public class PlotlyConfig implements IWidgetConfig {
 
     List<HashMap<String, Object>> traces = new Vector<HashMap<String, Object>>();
 
@@ -27,7 +28,6 @@ public class PlotlyConfig {
         config.put("layout", layout);
         return config;
     }
-
 
     public void scatter(HashMap<String, Object> params){
         HashMap<String, Object> defaultParams = new HashMap<String, Object>();

@@ -10,10 +10,9 @@ report {
     content {
 
         h2 "Dataset"
-        datatable {
-            data(iris)
-
-        }
+        datatable (
+            data: iris.select("sepallength", "sepalwidth")
+        )
 
         h2 "Relation between variables"
         p "We will see the relationship between the sepal length and sepal width and also between petal length and petal width."
@@ -29,8 +28,7 @@ report {
         }
 
         plotly {
-            def classes = iris.splitOn(iris.categoricalColumn("class"))
-            for (table in classes){
+            for (table in iris.splitOn(iris.categoricalColumn("class"))){
                 scatter (
                       x: table.column("sepallength").asList(),
                       y: table.column("sepalwidth").asList(),
@@ -40,11 +38,17 @@ report {
             }
         }
 
-        plotly {
-            box (
-                  y: iris.column("sepallength").asList(),
-                  x: iris.column("class").asList()
-            )
+        card {
+            title "Lukas"
+            description "Hallo Freunde. Eine kleine description"
+            body {
+                plotly {
+                    box (
+                          y: iris.column("sepallength").asList(),
+                          x: iris.column("class").asList()
+                    )
+                }
+            }
         }
 
         h2 "Distribution"
@@ -58,7 +62,10 @@ report {
                     opacity: 0.5
                 )
             }
-            layout barmode: "overlay"
+            layout (
+                title: "Distribution of all classes",
+                barmode: "overlay"
+            )
         }
 
         for (className in iris.column("class").asSet()) {

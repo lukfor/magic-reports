@@ -9,6 +9,9 @@ import lukfor.reports.widgets.plots.PlotlyConfig;
 import lukfor.reports.widgets.plots.PlotlyWidget;
 import lukfor.reports.widgets.tables.DataTableConfig;
 import lukfor.reports.widgets.tables.DataTableWidget;
+import org.commonmark.node.*;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -32,6 +35,18 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 		Map<String, String> attributes = new HashMap<>();
 		attributes.put("id", id);
 		invokeMethod("div",  new Object[]{attributes, closure});
+	}
+
+	public void markdown(String text) {
+		Parser parser = Parser.builder().build();
+		Node document = parser.parse(text);
+		HtmlRenderer renderer = HtmlRenderer.builder().build();
+		String html = renderer.render(document);
+		getMkp().yieldUnescaped(html);
+	}
+
+	public void md(String text) {
+		markdown(text);
 	}
 
 	public void plotly(Closure closure) {

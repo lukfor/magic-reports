@@ -1,9 +1,22 @@
+def text =
+"""
+multiline text
+
+line 2
+
+- item 1
+- item 2
+- item 3
+"""
+
 report {
 
 	title "Dashboard"
 
     content {
         h2 "Hello ${params.name}"
+        md "this a **bold** text"
+        md text
     }
 
 }

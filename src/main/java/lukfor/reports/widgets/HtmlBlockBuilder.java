@@ -51,6 +51,11 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 		getMkp().yieldUnescaped(html);
 	}
 
+	public void render(Closure closure) {
+		String html = Component.build(closure).render(report);
+		getMkp().yieldUnescaped(html);
+	}
+
 	public void md(String text) {
 		markdown(text);
 	}

@@ -24,6 +24,24 @@ def bootstrap_table (String tableId, List<List<Object>> data) {
     }
 }
 
+//TODO: needs at least three params.. otherwise builder executes inhouse method.
+def bootstrap_card (String title, String imageUrl, Closure closure) {
+
+    return Component.build {
+
+        div(class: "card") {
+            div(class: "card-body") {
+                if (imageUrl) {
+                    img(src: imageUrl, class: "card-img-top", alt: "Card image")
+                }
+                h5(class: "card-title", title)
+                div(class: "card-text", render(closure))
+            }
+        }
+
+    }
+}
+
 
 def irisData = [
     ["Sepal Length", "Sepal Width", "Petal Length", "Petal Width", "Species"],
@@ -39,10 +57,17 @@ report {
 	title "Iris Dataset Report"
 
     content {
+
         h2("Iris Dataset Report")
 
-        // Using a Table Component to display the Iris dataset
-        render(bootstrap_table("iris-table", irisData))
+        // Using a Card Component to display the Iris dataset
+        render bootstrap_card("Title", "https://picsum.photos/200") {
+            p "Description"
+
+            // Using a Table Component to display the Iris dataset
+            render bootstrap_table("iris-table", irisData)
+        }
+
     }
 
 }

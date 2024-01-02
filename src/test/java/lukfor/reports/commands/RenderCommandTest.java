@@ -27,6 +27,13 @@ public class RenderCommandTest extends TestCase {
 	}
 
 
+	public void testWithImport() throws Exception {
+		App app = new App();
+		int exitCode = app.run("render","-i","test-data/report04/report04.report","-o","report03.html");
+		assertEquals(0, exitCode);
+	}
+
+
 	public void testExample() throws Exception {
 		App app = new App();
 		int exitCode = app.run("render","-i","examples/iris.report","-o","examples/iris.html");

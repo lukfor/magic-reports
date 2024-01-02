@@ -1,0 +1,48 @@
+import lukfor.reports.Component
+
+//TODO: needs at least two params.. otherwise builder executes inhouse method.
+def bootstrap_table (String tableId, List<List<Object>> data) {
+    return Component.build {
+        table(id: tableId, class: "table table-bordered table-striped") {
+            thead {
+                tr {
+                    for (String header : data[0]) {
+                        th(header)
+                    }
+                }
+            }
+            tbody {
+                for (int i = 1; i < data.size(); i++) {
+                    tr {
+                        for (String cell : data[i]) {
+                            td(cell)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+def irisData = [
+    ["Sepal Length", "Sepal Width", "Petal Length", "Petal Width", "Species"],
+    [5.1, 3.5, 1.4, 0.2, "setosa"],
+    [4.9, 3.0, 1.4, 0.2, "setosa"],
+    // ... more data
+]
+
+
+
+report {
+
+	title "Iris Dataset Report"
+
+    content {
+        h2("Iris Dataset Report")
+
+        // Using a Table Component to display the Iris dataset
+        render(bootstrap_table("iris-table", irisData))
+    }
+
+}

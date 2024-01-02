@@ -2,6 +2,7 @@ package lukfor.reports.widgets;
 
 import groovy.lang.Closure;
 import groovy.xml.MarkupBuilder;
+import lukfor.reports.Component;
 import lukfor.reports.HtmlWidgetsReport;
 import lukfor.reports.widgets.components.CardConfig;
 import lukfor.reports.widgets.components.CardWidget;
@@ -42,6 +43,11 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 		Node document = parser.parse(text);
 		HtmlRenderer renderer = HtmlRenderer.builder().build();
 		String html = renderer.render(document);
+		getMkp().yieldUnescaped(html);
+	}
+
+	public void render(Component component) {
+		String html = component.render(report);
 		getMkp().yieldUnescaped(html);
 	}
 

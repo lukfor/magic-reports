@@ -30,12 +30,15 @@ public class ReportBuilder {
 
         ImportCustomizer customizer = new ImportCustomizer();
         customizer.addStaticImport("lukfor.reports.widgets.ReportBuilder", "report");
+        customizer.addImports("lukfor.reports.Component");
 
         CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
         compilerConfiguration.addCompilationCustomizers(customizer);
 
         GroovyShell shell = new GroovyShell(ReportBuilder.class.getClassLoader(), compilerConfiguration);
         shell.setProperty("params", params);
+        shell.setProperty("baseDir", script.getParent());
+        shell.setProperty("projectDir", script.getParent());
         HtmlWidgetsReport report = (HtmlWidgetsReport) shell.evaluate(script);
         report.setFile(script);
 

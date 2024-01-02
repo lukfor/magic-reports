@@ -1,4 +1,29 @@
-import lukfor.reports.Component
+//TODO: needs at least three params.. otherwise builder executes inhouse method.
+def bootstrap_card (String title, String imageUrl, Closure closure) {
+    return Component.build {
+        div(class: "card my-5") {
+            div(class: "card-body") {
+                if (imageUrl) {
+                    img(src: imageUrl, class: "card-img-top", alt: "Card image")
+                }
+                h5(class: "card-title", title)
+                div(class: "card-text", render(closure))
+            }
+        }
+    }
+}
+
+//TODO: Test with Map<String, Object> options and options.title,...
+def bootstrap_header(String title, String description, String color) {
+     return Component.build {
+        div(class: "px-4 py-5 text-center", style:"background-color: $color") {
+            h1(class: "display-5 fw-bold", title)
+            div(class: "col-lg-6 mx-auto") {
+                p(class: "lead mb-4", description)
+            }
+        }
+    }
+}
 
 //TODO: needs at least two params.. otherwise builder executes inhouse method.
 def bootstrap_table (String tableId, List<List<Object>> data) {
@@ -24,25 +49,6 @@ def bootstrap_table (String tableId, List<List<Object>> data) {
     }
 }
 
-//TODO: needs at least three params.. otherwise builder executes inhouse method.
-def bootstrap_card (String title, String imageUrl, Closure closure) {
-
-    return Component.build {
-
-        div(class: "card") {
-            div(class: "card-body") {
-                if (imageUrl) {
-                    img(src: imageUrl, class: "card-img-top", alt: "Card image")
-                }
-                h5(class: "card-title", title)
-                div(class: "card-text", render(closure))
-            }
-        }
-
-    }
-}
-
-
 def irisData = [
     ["Sepal Length", "Sepal Width", "Petal Length", "Petal Width", "Species"],
     [5.1, 3.5, 1.4, 0.2, "setosa"],
@@ -50,22 +56,46 @@ def irisData = [
     // ... more data
 ]
 
-
+def age = [2,3,4,5,6,7,8,9]
+def salary = [100,200,300,400,500,600,700,800]
 
 report {
 
-	title "Iris Dataset Report"
+    template file("template/index.html")
+
+    header {
+        render bootstrap_header(
+            "Iris Dataset",
+            "The Iris dataset is a well-known dataset in the field of machine learning and statistics. It was introduced by the biologist and statistician Ronald A. Fisher in 1936. The dataset consists of measurements of four features (sepal length, sepal width, petal length, and petal width) for 150 iris flowers, divided into three species: setosa, versicolor, and virginica.",
+            "#82715f6e"
+        )
+    }
 
     content {
 
-        h2("Iris Dataset Report")
-
         // Using a Card Component to display the Iris dataset
-        render bootstrap_card("Title", "https://picsum.photos/200") {
-            p "Description"
+        render bootstrap_card("Dataset", null) {
+            p "Dataset Overview"
 
             // Using a Table Component to display the Iris dataset
             render bootstrap_table("iris-table", irisData)
+        }
+
+        render bootstrap_card("Plotly", null) {
+            p "Simple Scatter plot"
+
+            plotly {
+                trace (
+                      x: age,
+                      y: salary,
+                      mode: "markers",
+                      type: "scatter"
+                )
+            }
+        }
+
+        footer(class: "d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"){
+            span(class: "mb-3 mb-md-0 text-muted","This report was created by ${System.getProperty("user.name")} on ${new Date()}")
         }
 
     }

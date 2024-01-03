@@ -13,6 +13,29 @@ def bootstrap_card (String title, String imageUrl, Closure closure) {
     }
 }
 
+//TODO: hasmap/variables --> in its own class. use as config object for components. should enable to reproduce card
+//User.metaClass.static.new
+
+component("bootstrap_header2") {
+
+    init:
+    """
+    fsdfsd. fsd.fds .fds
+    """
+
+    html: {
+        div(class: "px-4 py-5 text-center", style:"background-color: $color") {
+            h1(class: "display-5 fw-bold", title)
+            div(class: "col-lg-6 mx-auto") {
+                p(class: "lead mb-4", description)
+            }
+        }
+    }
+
+}
+
+
+
 //TODO: Test with Map<String, Object> options and options.title,...
 def bootstrap_header(String title, String description, String color) {
      return Component.build {
@@ -61,7 +84,7 @@ def salary = [100,200,300,400,500,600,700,800]
 
 report {
 
-    template file("template/index.html")
+    template file("$baseDir/template/index.html")
 
     header {
         render bootstrap_header(

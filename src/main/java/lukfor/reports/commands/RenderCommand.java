@@ -4,7 +4,7 @@ import lukfor.reports.HtmlWidgetsReport;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
 
-import lukfor.reports.widgets.ReportBuilder;
+import lukfor.reports.dsl.ReportParser;
 
 import java.io.File;
 import java.util.HashMap;
@@ -45,8 +45,7 @@ public class RenderCommand implements Callable<Integer> {
             }
         }
 
-        ReportBuilder.setScript(input);
-        HtmlWidgetsReport report = ReportBuilder.parse(input, paramMap);
+        HtmlWidgetsReport report = ReportParser.parse(input, paramMap);
         report.render(output);
         return 0;
     }

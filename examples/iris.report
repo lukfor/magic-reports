@@ -1,7 +1,7 @@
 import tech.tablesaw.api.*
 import tech.tablesaw.columns.*
 
-def iris = Table.read().csv("examples/iris.csv")
+def iris = Table.read().csv("$baseDir/iris.csv")
 
 report {
 

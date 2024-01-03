@@ -10,11 +10,7 @@ public interface IWidget {
 
 	public String getKeyword();
 
-	public void init(HtmlWidgetsReport report, Closure closure);
-
-	public void init(HtmlWidgetsReport report, HashMap<String, Object> options);
-
-	//TODO: add init with options and closure
+	public void init(HtmlWidgetsReport report, Object args);
 
 	public String getHtml();
 
@@ -23,5 +19,5 @@ public interface IWidget {
 	public String[] getStyles();
 
 	public String[] getScripts();
-	
+
 }

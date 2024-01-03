@@ -26,7 +26,7 @@ public class CardWidget extends AbstractWidget {
 	}
 
 	@Override
-	public void init(HtmlWidgetsReport report, Closure closure) {
+	public void initWithClosure(HtmlWidgetsReport report, Closure closure) {
 		config = new CardConfig(report);
 		closure.setDelegate(config);
 		closure.setResolveStrategy(Closure.DELEGATE_FIRST);
@@ -34,7 +34,7 @@ public class CardWidget extends AbstractWidget {
 	}
 
 	@Override
-	public void init(HtmlWidgetsReport report, HashMap<String, Object> options) {
+	public void initWithOptions(HtmlWidgetsReport report, HashMap<String, Object> options) {
 		throw new RuntimeException("Not supported! please use card{}");
 	}
 

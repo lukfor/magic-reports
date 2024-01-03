@@ -22,6 +22,8 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 
 	private HtmlWidgetsReport report;
 
+	private WidgetRegistry widgetRegistry = WidgetRegistry.getInstance();
+
 	public HtmlBlockBuilder(HtmlWidgetsReport report, StringWriter writer) {
 		super(writer);
 		this.report = report;
@@ -60,40 +62,17 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 		markdown(text);
 	}
 
-	public void plotly(Closure closure) {
-		PlotlyWidget widget = new PlotlyWidget();
-		widget.init(report, closure);
-		widget(widget);
-	}
+	@Override
+	protected Object doInvokeMethod(String methodName, Object name, Object args) {
+		if (!widgetRegistry.contains(methodName)){
+			return super.doInvokeMethod(methodName, name, args);
+		}
 
-	public void plotly(HashMap<String, Object> config) {
-		PlotlyWidget widget = new PlotlyWidget();
-		widget.init(report, config);
+		IWidget widget = widgetRegistry.getInstance(methodName);
+		widget.init(report, args);
 		widget(widget);
-	}
 
-	public void datatable(Closure closure) {
-		DataTableWidget widget = new DataTableWidget();
-		widget.init(report, closure);
-		widget(widget);
-	}
-
-	public void datatable(HashMap<String, Object> config) {
-		DataTableWidget widget = new DataTableWidget();
-		widget.init(report, config);
-		widget(widget);
-	}
-
-	public void card(Closure closure) {
-		CardWidget widget = new CardWidget();
-		widget.init(report, closure);
-		widget(widget);
-	}
-
-	public void card(HashMap<String, Object> config) {
-		CardWidget widget = new CardWidget();
-		widget.init(report, config);
-		widget(widget);
+		return null;
 	}
 
 	public void widget(IWidget widget){

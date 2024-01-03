@@ -25,12 +25,12 @@ public class DataTableWidget extends AbstractWidget {
 	}
 
 	@Override
-	public void init(HtmlWidgetsReport report, Closure closure) {
+	public void initWithClosure(HtmlWidgetsReport report, Closure closure) {
 		throw new RuntimeException("Not supported! please use datatable()");
 	}
 
 	@Override
-	public void init(HtmlWidgetsReport report, HashMap<String, Object> options) {
+	public void initWithOptions(HtmlWidgetsReport report, HashMap<String, Object> options) {
 		config = new DataTableConfig(options);
 	}
 

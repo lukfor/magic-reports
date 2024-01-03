@@ -3,6 +3,10 @@ package lukfor.reports.dsl;
 import groovy.lang.Closure;
 import groovy.lang.Script;
 import lukfor.reports.HtmlWidgetsReport;
+import lukfor.reports.widgets.WidgetRegistry;
+import lukfor.reports.widgets.components.CardWidget;
+import lukfor.reports.widgets.plots.PlotlyWidget;
+import lukfor.reports.widgets.tables.DataTableWidget;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +21,12 @@ public class ReportDSL extends Script {
     private String baseDir;
 
     private File output;
+
+    public ReportDSL() {
+        WidgetRegistry.getInstance().register(DataTableWidget.KEYWORD, DataTableWidget.class);
+        WidgetRegistry.getInstance().register(PlotlyWidget.KEYWORD, PlotlyWidget.class);
+        WidgetRegistry.getInstance().register(CardWidget.KEYWORD, CardWidget.class);
+    }
 
     public void setScript(File script) {
         this.script = script;

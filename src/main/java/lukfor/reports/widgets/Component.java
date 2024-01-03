@@ -32,10 +32,15 @@ public class Component {
 
 		if (!list.isEmpty()) {
 			Object arg1 = list.get(0);
-			if (!(arg1 instanceof Map)) {
-				throw new RuntimeException("Component " + name + ". Options are not a map: " + arg1.getClass());
+			if (!(arg1 instanceof Map) && !(arg1 instanceof Closure)) {
+				throw new RuntimeException("Component " + name + ". Provided argument is not a map or closure: " + arg1.getClass());
 			}
-			options = (Map) arg1;
+
+			if (arg1 instanceof Map){
+				options = (Map) arg1;
+			} else{
+				options.put("body", arg1);
+			}
 
 			if (list.size() == 2) {
 				Object arg2 = list.get(1);

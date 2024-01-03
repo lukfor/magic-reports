@@ -2,6 +2,7 @@ include "$baseDir/components/bootstrap_header.report"
 include "$baseDir/components/bootstrap_table.report"
 include "$baseDir/components/bootstrap_card.report"
 include "$baseDir/components/bootstrap_tabs.report"
+include "$baseDir/components/bootstrap_footer.report"
 
 
 def irisData = [
@@ -14,6 +15,8 @@ def irisData = [
 def age = [2,3,4,5,6,7,8,9]
 def salary = [100,200,300,400,500,600,700,800]
 
+def primary = "#82715f6e"
+
 report {
 
     template file("$baseDir/template/index.html")
@@ -22,39 +25,30 @@ report {
         bootstrap_header (
             title: "Iris Dataset",
             description: "The Iris dataset is a well-known dataset in the field of machine learning and statistics. It was introduced by the biologist and statistician Ronald A. Fisher in 1936. The dataset consists of measurements of four features (sepal length, sepal width, petal length, and petal width) for 150 iris flowers, divided into three species: setosa, versicolor, and virginica.",
-            color: "#82715f6e"
+            color: primary
         )
     }
 
     content {
 
         bootstrap_card (title: "Dataset") {
-            bootstrap_tabs(tabs: [
-                    [
-                        id: "tab1",
-                        title: "Table",
-                        content: {
-                            p "Simple Scatter plot"
-                            bootstrap_table(data: irisData)
-                        }
-                    ],
-                    [
-                        id: "tab2",
-                        title: "Simple Scatter plot",
-                        content: {
-                            p "Scatter plot visualizing age and salary."
-                            plotly {
-                                trace (
-                                      x: age,
-                                      y: salary,
-                                      mode: "markers",
-                                      type: "scatter"
-                                )
-                            }
-                        }
-                    ]
-                ]
-            )
+            bootstrap_tabs {
+                bootstrap_tab(id: "tab1", title: "Table") {
+                    p "Simple Scatter plot"
+                    bootstrap_table(data: irisData)
+                }
+                bootstrap_tab(id: "tab2", title: "Simple Scatter plot") {
+                    p "Scatter plot visualizing age and salary."
+                    plotly {
+                        trace (
+                              x: age,
+                              y: salary,
+                              mode: "markers",
+                              type: "scatter"
+                        )
+                    }
+                }
+            }
         }
 
         // Using a Card Component to display the Iris dataset
@@ -75,10 +69,13 @@ report {
             }
         }
 
-        footer(class: "d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"){
-            span(class: "mb-3 mb-md-0 text-muted","This report was created by ${System.getProperty("user.name")} on ${new Date()}")
-        }
+    }
 
+    footer {
+        bootstrap_footer(
+            text: "This report was created by ${System.getProperty("user.name")} on ${new Date()}",
+            color: primary
+        )
     }
 
 }

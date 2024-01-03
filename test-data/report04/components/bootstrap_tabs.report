@@ -1,9 +1,26 @@
+class BootstrapTabsConfig {
+
+    def tabs = []
+
+    def bootstrap_tab(Map options, Closure body) {
+        tabs << [id: options.id, title: options.title, content: body]
+    }
+
+}
+
 component("bootstrap_tabs") {
+
+    // options.body contains the elements in "bootstrap_tab" tags.
+    def config = new BootstrapTabsConfig()
+    options.body.delegate = config
+    options.body.delegateStrategy = Closure.DELEGATE_FIRST
+    options.body()
+
     div {
         // Add Bootstrap classes for tabs
         ul(class: "nav nav-tabs", id: "myTabs", role:"tablist") {
-            // Iterate over options.tabs to create individual tabs
-            options.tabs.eachWithIndex { tab, index ->
+            // Iterate over config.tabs to create individual tabs
+            config.tabs.eachWithIndex { tab, index ->
                 li(class: "nav-item", role: "presentation") {
                     button(
                         class: "nav-link ${index == 0 ? 'active' : ''}",
@@ -21,8 +38,8 @@ component("bootstrap_tabs") {
 
         // Tab content
         div(class: "tab-content") {
-            // Iterate over options.tabs to create content for each tab
-            options.tabs.eachWithIndex { tab, index ->
+            // Iterate over config.tabs to create content for each tab
+            config.tabs.eachWithIndex { tab, index ->
                 div(
                     class: "tab-pane p-3 ${index == 0 ? 'show active' : ''}",
                     id: "${tab.id}",

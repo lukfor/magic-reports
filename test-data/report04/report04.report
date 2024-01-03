@@ -1,45 +1,8 @@
-component("bootstrap_card") {
-    div(class: "card my-5") {
-        div(class: "card-body") {
-            if (options.imageUrl) {
-                img(src: options.imageUrl, class: "card-img-top", alt: "Card image")
-            }
-            h5(class: "card-title", options.title)
-            div(class: "card-text", render(options.body))
-        }
-    }
-}
+include "$baseDir/components/bootstrap_header.report"
+include "$baseDir/components/bootstrap_table.report"
+include "$baseDir/components/bootstrap_card.report"
 
-component("bootstrap_header") {
-    div(class: "px-4 py-5 text-center", style:"background-color: ${options.color}") {
-        h1(class: "display-5 fw-bold", options.title)
-        div(class: "col-lg-6 mx-auto") {
-            p(class: "lead mb-4", options.description)
-        }
-    }
-}
 
-component("bootstrap_table") {
-    def headerRow = options.data[0]
-    table(class: "table table-bordered table-striped") {
-        thead {
-            tr {
-                for (String header : headerRow) {
-                    th(header)
-                }
-            }
-        }
-        tbody {
-            for (int i = 1; i < options.data.size(); i++) {
-                tr {
-                    for (String cell : options.data[i]) {
-                        td(cell)
-                    }
-                }
-            }
-        }
-    }
-}
 
 def irisData = [
     ["Sepal Length", "Sepal Width", "Petal Length", "Petal Width", "Species"],

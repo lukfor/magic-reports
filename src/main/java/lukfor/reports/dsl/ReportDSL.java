@@ -24,10 +24,14 @@ public class ReportDSL extends Script {
 
     private File output;
 
-    public ReportDSL() {
+    static {
         WidgetRegistry.getInstance().register(DataTableWidget.KEYWORD, DataTableWidget.class);
         WidgetRegistry.getInstance().register(PlotlyWidget.KEYWORD, PlotlyWidget.class);
         WidgetRegistry.getInstance().register(CardWidget.KEYWORD, CardWidget.class);
+    }
+
+    public ReportDSL() {
+
     }
 
     public void setScript(File script) {
@@ -48,6 +52,11 @@ public class ReportDSL extends Script {
 
     public void component(String name, final Closure closure) throws IOException {
         ComponentRegistry.getInstance().register(name, new Component(name, closure));
+    }
+
+    public void include(String filename) throws Exception {
+        System.out.println("Include filename " + filename);
+        ReportParser.include(new File(filename));
     }
 
     @Override

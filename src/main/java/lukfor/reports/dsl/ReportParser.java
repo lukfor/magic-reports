@@ -14,14 +14,7 @@ public class ReportParser {
 
     public static void run(File file, File output, Map<String, String> params) throws Exception {
 
-        ImportCustomizer customizer = new ImportCustomizer();
-        customizer.addImports("lukfor.reports.widgets.Component");
-
-        CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
-        compilerConfiguration.addCompilationCustomizers(customizer);
-        compilerConfiguration.setScriptBaseClass(ReportDSL.class.getName());
-
-        GroovyShell shell = new GroovyShell(ReportParser.class.getClassLoader(), compilerConfiguration);
+        GroovyShell shell = createGroovyShell();
 
         Script script = shell.parse(file);
         ReportDSL reportDsl = (ReportDSL) script;
@@ -31,6 +24,30 @@ public class ReportParser {
 
         script.run();
 
+    }
+
+    public static void include(File file) throws Exception {
+
+        GroovyShell shell = createGroovyShell();
+
+        Script script = shell.parse(file);
+        ReportDSL reportDsl = (ReportDSL) script;
+        reportDsl.setScript(file);
+
+        script.run();
+
+    }
+
+    private static GroovyShell createGroovyShell() {
+        ImportCustomizer customizer = new ImportCustomizer();
+        customizer.addImports("lukfor.reports.widgets.Component");
+
+        CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
+        compilerConfiguration.addCompilationCustomizers(customizer);
+        compilerConfiguration.setScriptBaseClass(ReportDSL.class.getName());
+
+        GroovyShell shell = new GroovyShell(ReportParser.class.getClassLoader(), compilerConfiguration);
+        return shell;
     }
 
 }

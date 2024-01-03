@@ -16,20 +16,22 @@ public class ReportDSL extends Script {
 
     private String baseDir;
 
+    private File output;
+
     public void setScript(File script) {
         this.script = script;
         baseDir = script.getAbsoluteFile().getParent();
     }
 
-    public HtmlWidgetsReport report(final Closure closure) throws IOException {
-        HtmlWidgetsReport report = new HtmlWidgetsReport();
-        report.setFile(script);
+    public void setOutput(File output) {
+        this.output = output;
+    }
+
+    public void report(final Closure closure) throws IOException {
+        HtmlWidgetsReport report = new HtmlWidgetsReport(this);
         closure.setDelegate(report);
         closure.call();
-
-        //TODO: render here! enables to create multiple instances of the same report!
-
-        return report;
+        report.render();
     }
 
     public void component(String name, final Closure closure) throws IOException {
@@ -58,4 +60,7 @@ public class ReportDSL extends Script {
         return baseDir;
     }
 
+    public File getOutput() {
+        return output;
+    }
 }

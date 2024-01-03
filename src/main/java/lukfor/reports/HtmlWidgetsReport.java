@@ -12,6 +12,7 @@ import java.util.Vector;
 import groovy.lang.Closure;
 import groovy.lang.GroovyObject;
 import groovy.lang.MetaClass;
+import lukfor.reports.dsl.ReportDSL;
 import lukfor.reports.functions.IncludeScriptFunction;
 import lukfor.reports.functions.IncludeStyleFunction;
 import lukfor.reports.widgets.HtmlBlock;
@@ -36,12 +37,15 @@ public class HtmlWidgetsReport implements GroovyObject {
 
 	private boolean selfContained = true;
 
-	private File file;
+	private ReportDSL reportDsl;
 
 	private Map<String, Object> variables = new HashMap<>();
 
-	public HtmlWidgetsReport() {
+	private File output;
 
+	public HtmlWidgetsReport(ReportDSL reportDsl) {
+		this.reportDsl = reportDsl;
+		output = reportDsl.getOutput();
 	}
 
 	public void title(String title) {
@@ -52,8 +56,16 @@ public class HtmlWidgetsReport implements GroovyObject {
 		this.selfContained = selfContained;
 	}
 
-	public void setFile(File file) {
-		this.file = file;
+	public void setOutput(File output) {
+		this.output = output;
+	}
+
+	public void output(File output){
+		this.output = output;
+	}
+
+	public void output(String output){
+		this.output = new File(output);
 	}
 
 	public void template(String template){
@@ -65,7 +77,7 @@ public class HtmlWidgetsReport implements GroovyObject {
 			templateDirectory = template.getAbsoluteFile().getParent();
 		} else {
 			String relativeTemplateDirectory = template.getParent();
-			templateDirectory = file.getAbsoluteFile().getParent() + "/" + relativeTemplateDirectory;
+			templateDirectory = reportDsl.getBaseDir() + "/" + relativeTemplateDirectory;
 		}
 		templateIndex = template.getName();
 		this.useClassPath = false;
@@ -74,7 +86,7 @@ public class HtmlWidgetsReport implements GroovyObject {
 	public File file(Map<String, Object> params, String filename){
 		File result = new File(filename);
 		if (!result.isAbsolute()){
-			result = new File(file.getAbsoluteFile().getParent(), result.getPath());
+			result = new File(reportDsl.getBaseDir(), result.getPath());
 		}
 		boolean checkIfExists = (boolean)params.getOrDefault("checkIfExists",false);
 		if (checkIfExists && !result.exists()){
@@ -102,7 +114,7 @@ public class HtmlWidgetsReport implements GroovyObject {
 		return block;
 	}
 
-	public void render(File output) throws IOException {
+	public void render() throws IOException {
 
 		HtmlReport report = new HtmlReport(templateDirectory, useClassPath);
 		report.setMainFilename(templateIndex);

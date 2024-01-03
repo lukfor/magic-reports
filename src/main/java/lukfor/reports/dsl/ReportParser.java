@@ -12,7 +12,7 @@ import java.util.Map;
 public class ReportParser {
 
 
-    public static HtmlWidgetsReport parse(File file, Map<String, String> params) throws Exception {
+    public static void run(File file, File output, Map<String, String> params) throws Exception {
 
         ImportCustomizer customizer = new ImportCustomizer();
         customizer.addImports("lukfor.reports.Component");
@@ -27,13 +27,9 @@ public class ReportParser {
         ReportDSL reportDsl = (ReportDSL) script;
         reportDsl.setParams(params);
         reportDsl.setScript(file);
+        reportDsl.setOutput(output);
 
-        Object result = script.run();
-        if (!(result instanceof  HtmlWidgetsReport)){
-            throw new RuntimeException("Last statement in script has to be report{}.");
-        }
-
-        return (HtmlWidgetsReport) result;
+        script.run();
 
     }
 

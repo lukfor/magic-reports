@@ -1,6 +1,5 @@
 package lukfor.reports.commands;
 
-import lukfor.reports.HtmlWidgetsReport;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
 
@@ -45,8 +44,8 @@ public class RenderCommand implements Callable<Integer> {
             }
         }
 
-        HtmlWidgetsReport report = ReportParser.parse(input, paramMap);
-        report.render(output);
+        ReportParser.run(input, output, paramMap);
+
         return 0;
     }
 }

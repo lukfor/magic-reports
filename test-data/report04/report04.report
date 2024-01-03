@@ -1,7 +1,7 @@
 include "$baseDir/components/bootstrap_header.report"
 include "$baseDir/components/bootstrap_table.report"
 include "$baseDir/components/bootstrap_card.report"
-
+include "$baseDir/components/bootstrap_tabs.report"
 
 
 def irisData = [
@@ -27,6 +27,35 @@ report {
     }
 
     content {
+
+        bootstrap_card (title: "Dataset") {
+            bootstrap_tabs(tabs: [
+                    [
+                        id: "tab1",
+                        title: "Table",
+                        content: {
+                            p "Simple Scatter plot"
+                            bootstrap_table(data: irisData)
+                        }
+                    ],
+                    [
+                        id: "tab2",
+                        title: "Simple Scatter plot",
+                        content: {
+                            p "Scatter plot visualizing age and salary."
+                            plotly {
+                                trace (
+                                      x: age,
+                                      y: salary,
+                                      mode: "markers",
+                                      type: "scatter"
+                                )
+                            }
+                        }
+                    ]
+                ]
+            )
+        }
 
         // Using a Card Component to display the Iris dataset
         bootstrap_card (title: "Dataset") {

@@ -1,0 +1,38 @@
+component("bootstrap_tabs") {
+    div {
+        // Add Bootstrap classes for tabs
+        ul(class: "nav nav-tabs", id: "myTabs", role:"tablist") {
+            // Iterate over options.tabs to create individual tabs
+            options.tabs.eachWithIndex { tab, index ->
+                li(class: "nav-item", role: "presentation") {
+                    button(
+                        class: "nav-link ${index == 0 ? 'active' : ''}",
+                        id: "${tab.id}-tab",
+                        "data-bs-toggle": "tab",
+                        "data-bs-target": "#${tab.id}",
+                        type:"button",
+                        role:"tab",
+                        "aria-controls": "profile",
+                        "aria-selected": index == 0 ? "true" : "false",
+                        tab.title)
+                }
+            }
+        }
+
+        // Tab content
+        div(class: "tab-content") {
+            // Iterate over options.tabs to create content for each tab
+            options.tabs.eachWithIndex { tab, index ->
+                div(
+                    class: "tab-pane p-3 ${index == 0 ? 'show active' : ''}",
+                    id: "${tab.id}",
+                    role: "tabpanel",
+                    "aria-labelledby": "${tab.id}-tab"
+                ) {
+                    // Set tab content. its a closure, use render
+                    render(tab.content)
+                }
+            }
+        }
+    }
+}

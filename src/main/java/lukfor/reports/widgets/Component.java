@@ -20,20 +20,32 @@ public class Component {
 		this.closure = closure;
 	}
 
-	public String render(HtmlWidgetsReport report, Object args){
+	public String render(HtmlWidgetsReport report, Object args) {
 
 		Map<String, Object> options = new HashMap<>();
 
 		List list = InvokerHelper.asList(args);
-		if (list.size() == 1){
-			Object arg = list.get(0);
-			if (!(arg instanceof Map)){
-				throw new RuntimeException("Component " + name + ". Options are not a map: " + arg.getClass());
-			}
-			options = (Map) arg;
-		} else if (list.size() > 1){
+
+		if (list.size() > 2) {
 			throw new RuntimeException("Component " + name + ". More than one parameter: " + list);
 		}
+
+		if (!list.isEmpty()) {
+			Object arg1 = list.get(0);
+			if (!(arg1 instanceof Map)) {
+				throw new RuntimeException("Component " + name + ". Options are not a map: " + arg1.getClass());
+			}
+			options = (Map) arg1;
+
+			if (list.size() == 2) {
+				Object arg2 = list.get(1);
+				if (!(arg2 instanceof Closure)) {
+					throw new RuntimeException("Component " + name + ". Body is not a closure: " + arg2.getClass());
+				}
+				options.put("body", arg2);
+			}
+		}
+
 		StringWriter writer = new StringWriter();
 		HtmlBlockBuilder builder = new HtmlBlockBuilder(report, writer);
 		closure.setProperty("options", options);

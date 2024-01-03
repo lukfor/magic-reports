@@ -66,28 +66,22 @@ report {
     content {
 
         // Using a Card Component to display the Iris dataset
-        bootstrap_card (
-            title: "Dataset",
-            body: {
-                p "Dataset Overview"
-                bootstrap_table(data: irisData)
-            }
-        )
+        bootstrap_card (title: "Dataset") {
+            p "Dataset Overview"
+            bootstrap_table(data: irisData)
+        }
 
-        bootstrap_card (
-            title: "Plotly22",
-            body: {
-                p "Simple Scatter plot"
-                plotly {
-                    trace (
-                          x: age,
-                          y: salary,
-                          mode: "markers",
-                          type: "scatter"
-                    )
-                }
+        bootstrap_card (title: "Plotly22") {
+            p "Simple Scatter plot"
+            plotly {
+                trace (
+                      x: age,
+                      y: salary,
+                      mode: "markers",
+                      type: "scatter"
+                )
             }
-        )
+        }
 
         footer(class: "d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"){
             span(class: "mb-3 mb-md-0 text-muted","This report was created by ${System.getProperty("user.name")} on ${new Date()}")

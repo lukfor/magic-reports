@@ -2,14 +2,7 @@ package lukfor.reports.widgets;
 
 import groovy.lang.Closure;
 import groovy.xml.MarkupBuilder;
-import lukfor.reports.Component;
 import lukfor.reports.HtmlWidgetsReport;
-import lukfor.reports.widgets.components.CardConfig;
-import lukfor.reports.widgets.components.CardWidget;
-import lukfor.reports.widgets.plots.PlotlyConfig;
-import lukfor.reports.widgets.plots.PlotlyWidget;
-import lukfor.reports.widgets.tables.DataTableConfig;
-import lukfor.reports.widgets.tables.DataTableWidget;
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -23,6 +16,8 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 	private HtmlWidgetsReport report;
 
 	private WidgetRegistry widgetRegistry = WidgetRegistry.getInstance();
+
+	private ComponentRegistry componentRegistry = ComponentRegistry.getInstance();
 
 	public HtmlBlockBuilder(HtmlWidgetsReport report, StringWriter writer) {
 		super(writer);
@@ -48,13 +43,11 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 		getMkp().yieldUnescaped(html);
 	}
 
-	public void render(Component component) {
-		String html = component.render(report);
-		getMkp().yieldUnescaped(html);
-	}
-
-	public void render(Closure closure) {
-		String html = Component.build(closure).render(report);
+	public void render(Closure template) {
+		StringWriter writer = new StringWriter();
+		HtmlBlockBuilder builder = new HtmlBlockBuilder(report, writer);
+		builder.build("component-container", template);
+		String html = writer.toString();
 		getMkp().yieldUnescaped(html);
 	}
 
@@ -64,15 +57,21 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 
 	@Override
 	protected Object doInvokeMethod(String methodName, Object name, Object args) {
-		if (!widgetRegistry.contains(methodName)){
-			return super.doInvokeMethod(methodName, name, args);
+		if (widgetRegistry.contains(methodName)) {
+			IWidget widget = widgetRegistry.getInstance(methodName);
+			widget.init(report, args);
+			widget(widget);
+			return null;
 		}
 
-		IWidget widget = widgetRegistry.getInstance(methodName);
-		widget.init(report, args);
-		widget(widget);
+		if (componentRegistry.contains(methodName)) {
+			Component component = componentRegistry.getInstance(methodName);
+			String html = component.render(report, args);
+			getMkp().yieldUnescaped(html);
+			return null;
+		}
 
-		return null;
+		return super.doInvokeMethod(methodName, name, args);
 	}
 
 	public void widget(IWidget widget){

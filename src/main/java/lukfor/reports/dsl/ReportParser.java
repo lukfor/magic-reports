@@ -15,7 +15,7 @@ public class ReportParser {
     public static void run(File file, File output, Map<String, String> params) throws Exception {
 
         ImportCustomizer customizer = new ImportCustomizer();
-        customizer.addImports("lukfor.reports.Component");
+        customizer.addImports("lukfor.reports.widgets.Component");
 
         CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
         compilerConfiguration.addCompilationCustomizers(customizer);

@@ -1,70 +1,39 @@
-//TODO: needs at least three params.. otherwise builder executes inhouse method.
-def bootstrap_card (String title, String imageUrl, Closure closure) {
-    return Component.build {
-        div(class: "card my-5") {
-            div(class: "card-body") {
-                if (imageUrl) {
-                    img(src: imageUrl, class: "card-img-top", alt: "Card image")
+component("bootstrap_card") {
+    div(class: "card my-5") {
+        div(class: "card-body") {
+            if (options.imageUrl) {
+                img(src: options.imageUrl, class: "card-img-top", alt: "Card image")
+            }
+            h5(class: "card-title", options.title)
+            div(class: "card-text", render(options.body))
+        }
+    }
+}
+
+component("bootstrap_header") {
+    div(class: "px-4 py-5 text-center", style:"background-color: ${options.color}") {
+        h1(class: "display-5 fw-bold", options.title)
+        div(class: "col-lg-6 mx-auto") {
+            p(class: "lead mb-4", options.description)
+        }
+    }
+}
+
+component("bootstrap_table") {
+    def headerRow = options.data[0]
+    table(class: "table table-bordered table-striped") {
+        thead {
+            tr {
+                for (String header : headerRow) {
+                    th(header)
                 }
-                h5(class: "card-title", title)
-                div(class: "card-text", render(closure))
             }
         }
-    }
-}
-
-//TODO: hasmap/variables --> in its own class. use as config object for components. should enable to reproduce card
-//User.metaClass.static.new
-
-component("bootstrap_header2") {
-
-    init:
-    """
-    fsdfsd. fsd.fds .fds
-    """
-
-    html: {
-        div(class: "px-4 py-5 text-center", style:"background-color: $color") {
-            h1(class: "display-5 fw-bold", title)
-            div(class: "col-lg-6 mx-auto") {
-                p(class: "lead mb-4", description)
-            }
-        }
-    }
-
-}
-
-
-
-//TODO: Test with Map<String, Object> options and options.title,...
-def bootstrap_header(String title, String description, String color) {
-     return Component.build {
-        div(class: "px-4 py-5 text-center", style:"background-color: $color") {
-            h1(class: "display-5 fw-bold", title)
-            div(class: "col-lg-6 mx-auto") {
-                p(class: "lead mb-4", description)
-            }
-        }
-    }
-}
-
-//TODO: needs at least two params.. otherwise builder executes inhouse method.
-def bootstrap_table (String tableId, List<List<Object>> data) {
-    return Component.build {
-        table(id: tableId, class: "table table-bordered table-striped") {
-            thead {
+        tbody {
+            for (int i = 1; i < options.data.size(); i++) {
                 tr {
-                    for (String header : data[0]) {
-                        th(header)
-                    }
-                }
-            }
-            tbody {
-                for (int i = 1; i < data.size(); i++) {
-                    tr {
-                        for (String cell : data[i]) {
-                            td(cell)
-                        }
+                    for (String cell : options.data[i]) {
+                        td(cell)
                     }
                 }
             }
@@ -87,35 +56,38 @@ report {
     template file("$baseDir/template/index.html")
 
     header {
-        render bootstrap_header(
-            "Iris Dataset",
-            "The Iris dataset is a well-known dataset in the field of machine learning and statistics. It was introduced by the biologist and statistician Ronald A. Fisher in 1936. The dataset consists of measurements of four features (sepal length, sepal width, petal length, and petal width) for 150 iris flowers, divided into three species: setosa, versicolor, and virginica.",
-            "#82715f6e"
+        bootstrap_header (
+            title: "Iris Dataset",
+            description: "The Iris dataset is a well-known dataset in the field of machine learning and statistics. It was introduced by the biologist and statistician Ronald A. Fisher in 1936. The dataset consists of measurements of four features (sepal length, sepal width, petal length, and petal width) for 150 iris flowers, divided into three species: setosa, versicolor, and virginica.",
+            color: "#82715f6e"
         )
     }
 
     content {
 
         // Using a Card Component to display the Iris dataset
-        render bootstrap_card("Dataset", null) {
-            p "Dataset Overview"
-
-            // Using a Table Component to display the Iris dataset
-            render bootstrap_table("iris-table", irisData)
-        }
-
-        render bootstrap_card("Plotly", null) {
-            p "Simple Scatter plot"
-
-            plotly {
-                trace (
-                      x: age,
-                      y: salary,
-                      mode: "markers",
-                      type: "scatter"
-                )
+        bootstrap_card (
+            title: "Dataset",
+            body: {
+                p "Dataset Overview"
+                bootstrap_table(data: irisData)
             }
-        }
+        )
+
+        bootstrap_card (
+            title: "Plotly22",
+            body: {
+                p "Simple Scatter plot"
+                plotly {
+                    trace (
+                          x: age,
+                          y: salary,
+                          mode: "markers",
+                          type: "scatter"
+                    )
+                }
+            }
+        )
 
         footer(class: "d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"){
             span(class: "mb-3 mb-md-0 text-muted","This report was created by ${System.getProperty("user.name")} on ${new Date()}")

@@ -2,7 +2,9 @@ package lukfor.reports.dsl;
 
 import groovy.lang.Closure;
 import groovy.lang.Script;
+import lukfor.reports.widgets.Component;
 import lukfor.reports.HtmlWidgetsReport;
+import lukfor.reports.widgets.ComponentRegistry;
 import lukfor.reports.widgets.WidgetRegistry;
 import lukfor.reports.widgets.components.CardWidget;
 import lukfor.reports.widgets.plots.PlotlyWidget;
@@ -45,7 +47,7 @@ public class ReportDSL extends Script {
     }
 
     public void component(String name, final Closure closure) throws IOException {
-
+        ComponentRegistry.getInstance().register(name, new Component(name, closure));
     }
 
     @Override

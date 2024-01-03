@@ -31,6 +31,7 @@ public class WidgetRegistry {
     }
 
     public IWidget getInstance(String keyword){
+        System.out.println("Create instance of " + keyword);
         Class<? extends IWidget> clazz = widgets.get(keyword);
         try {
             return clazz.getDeclaredConstructor().newInstance();

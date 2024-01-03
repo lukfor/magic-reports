@@ -15,6 +15,11 @@ public class Component {
 
 	private Closure closure;
 
+	private static int ids = 0;
+	public static String uniqueId() {
+		return "element_" + ids++;
+	}
+
 	public Component(String name, Closure closure){
 		this.name = name;
 		this.closure = closure;
@@ -54,7 +59,7 @@ public class Component {
 		StringWriter writer = new StringWriter();
 		HtmlBlockBuilder builder = new HtmlBlockBuilder(report, writer);
 		closure.setProperty("options", options);
-		builder.build("component-container", closure);
+		builder.build(Component.uniqueId(), closure);
 		return writer.toString();
 	}
 

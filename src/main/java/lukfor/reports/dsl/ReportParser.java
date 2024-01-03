@@ -7,6 +7,8 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 
 public class ReportParser {
@@ -33,6 +35,18 @@ public class ReportParser {
         Script script = shell.parse(file);
         ReportDSL reportDsl = (ReportDSL) script;
         reportDsl.setScript(file);
+
+        script.run();
+
+    }
+
+    public static void include(InputStream stream) throws Exception {
+
+        GroovyShell shell = createGroovyShell();
+
+        Script script = shell.parse(new InputStreamReader(stream));
+        ReportDSL reportDsl = (ReportDSL) script;
+        //reportDsl.setScript(file);
 
         script.run();
 

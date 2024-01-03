@@ -1,6 +1,7 @@
 package lukfor.reports.data;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class DataWrapper {
 
@@ -14,7 +15,9 @@ public class DataWrapper {
 		if (object == null) {
 			return "undefined";
 		} else {
-			Gson gson = new Gson();
+			GsonBuilder builder = new GsonBuilder();
+			builder.serializeNulls();
+			Gson gson = builder.create();
 			return gson.toJson(object);
 		}
 	}

@@ -12,6 +12,8 @@ public class DataTableConfig implements IWidgetConfig {
 
     private List<Map<String, Object>> columns = null;
 
+    private HashMap<String, Object> options;
+
     public DataTableConfig() {
 
     }
@@ -33,6 +35,7 @@ public class DataTableConfig implements IWidgetConfig {
                 setColumns((List<Map<String, Object>>) _columns);
             }
         }
+        this.options = config;
     }
 
     public void setData(List<Map<String, Object>> objects){
@@ -70,9 +73,12 @@ public class DataTableConfig implements IWidgetConfig {
             throw new RuntimeException("Please specify `columns`.");
         }
         HashMap<String, Object> config = new HashMap<String, Object>();
+        config.putAll(options);
         config.put("data", data);
         config.put("columns", columns);
         return config;
     }
+
+
 
 }

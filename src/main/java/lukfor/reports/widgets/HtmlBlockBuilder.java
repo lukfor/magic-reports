@@ -46,7 +46,7 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 	public void render(Closure template) {
 		StringWriter writer = new StringWriter();
 		HtmlBlockBuilder builder = new HtmlBlockBuilder(report, writer);
-		builder.build("component-container", template);
+		builder.build(Component.uniqueId(), template);
 		String html = writer.toString();
 		getMkp().yieldUnescaped(html);
 	}

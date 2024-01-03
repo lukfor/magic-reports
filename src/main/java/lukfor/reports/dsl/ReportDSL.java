@@ -12,6 +12,7 @@ import lukfor.reports.widgets.tables.DataTableWidget;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 public class ReportDSL extends Script {
@@ -50,13 +51,26 @@ public class ReportDSL extends Script {
         report.render();
     }
 
+
     public void component(String name, final Closure closure) throws IOException {
         ComponentRegistry.getInstance().register(name, new Component(name, closure));
     }
 
     public void include(String filename) throws Exception {
-        System.out.println("Include filename " + filename);
-        ReportParser.include(new File(filename));
+        File file = new File(filename);
+        if (file.exists()) {
+            System.out.println("Include filename " + filename);
+            ReportParser.include(file);
+            return;
+        }
+
+        InputStream stream = ReportDSL.class.getResourceAsStream(filename.startsWith("/") ? filename : "/" + filename);
+        if (stream == null){
+            throw new RuntimeException("Component not found '" + filename + "'");
+        }
+
+        ReportParser.include(stream);
+
     }
 
     @Override

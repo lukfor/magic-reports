@@ -1,0 +1,11 @@
+component("bootstrap_card") {
+    div(class: "card my-5") {
+        div(class: "card-body") {
+            if (options.imageUrl) {
+                img(src: options.imageUrl, class: "card-img-top", alt: "Card image")
+            }
+            h5(class: "card-title", options.title)
+            div(class: "card-text", render(options.body))
+        }
+    }
+}

@@ -40,4 +40,10 @@ public class RenderCommandTest extends TestCase {
 		assertEquals(0, exitCode);
 	}
 
+	public void testExample2() throws Exception {
+		App app = new App();
+		int exitCode = app.run("render","-i","examples/whisky.report","-o","examples/whisky.html");
+		assertEquals(0, exitCode);
+	}
+
 }

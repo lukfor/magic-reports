@@ -29,7 +29,7 @@ public class HtmlWidgetsReport implements GroovyObject {
 
 	private String title = "Report";
 
-	private String templateDirectory = "/default";
+	private String templateDirectory = "/templates/default";
 
 	private String templateIndex= "index.html";
 
@@ -69,7 +69,11 @@ public class HtmlWidgetsReport implements GroovyObject {
 	}
 
 	public void template(String template){
-		this.templateDirectory = template;
+		if (!template.startsWith("/")){
+			this.templateDirectory = "/templates/" + template;
+		} else {
+			this.templateDirectory = template;
+		}
 	}
 
 	public void template(File template){

@@ -41,13 +41,13 @@ public class RenderCommandTest extends TestCase {
 
 	public void testExample() throws Exception {
 		App app = new App();
-		int exitCode = app.run("render","-i","examples/iris.report","-o","examples/iris.html");
+		int exitCode = app.run("render","-i","examples/iris.report","-o","docs/examples/iris.html");
 		assertEquals(0, exitCode);
 	}
 
 	public void testExample2() throws Exception {
 		App app = new App();
-		int exitCode = app.run("render","-i","examples/whisky.report","-o","examples/whisky.html");
+		int exitCode = app.run("render","-i","examples/whisky.report","-o","docs/examples/whisky.html");
 		assertEquals(0, exitCode);
 	}
 

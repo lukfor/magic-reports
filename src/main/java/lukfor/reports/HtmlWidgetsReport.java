@@ -1,113 +1,240 @@
 package lukfor.reports;
 
+import java.beans.Transient;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Vector;
-import java.util.function.Function;
 
+import groovy.lang.Closure;
+import groovy.lang.GroovyObject;
+import groovy.lang.MetaClass;
+import lukfor.reports.dsl.ReportDSL;
 import lukfor.reports.functions.IncludeScriptFunction;
 import lukfor.reports.functions.IncludeStyleFunction;
+import lukfor.reports.widgets.HtmlBlock;
 import lukfor.reports.widgets.IWidget;
-import lukfor.reports.widgets.WidgetInstance;
-import lukfor.reports.widgets.WidgetFactory;
-import lukfor.reports.widgets.WidgetRenderFunction;
+import org.codehaus.groovy.runtime.InvokerHelper;
 
-public class HtmlWidgetsReport extends HtmlReport {
+public class HtmlWidgetsReport implements GroovyObject {
 
 	protected Map<String, IWidget> importedWidgets = new HashMap<String, IWidget>();
 
-	private List<WidgetInstance> instances = new Vector<>();
+	private List<IWidget> instances = new Vector<IWidget>();
 
-	public HtmlWidgetsReport(String inputDirectory) {
+	private List<HtmlBlock> blocks = new Vector<HtmlBlock>();
 
-		super(inputDirectory);
+	private String title = "Report";
 
-		set("import_widget", new Function<String, String>() {
+	private String templateDirectory = "/templates/github-readme";
 
-			@Override
-			public String apply(String id) {
+	private String templateIndex= "index.html";
 
-				// import widget
-				IWidget widget = importWidget(id);
+	private boolean useClassPath = true;
 
-				// register render function
-				set(widget.getId(), new WidgetRenderFunction(HtmlWidgetsReport.this, widget));
+	private boolean selfContained = true;
 
-				// return head
-				return getHead(widget);
-			}
+	private ReportDSL reportDsl;
 
-		});
+	private Map<String, Object> variables = new HashMap<>();
 
-		set("activate_widgets", new Function<String, String>() {
+	private File output;
 
-			@Override
-			public String apply(String arg0) {
-				return getScript();
-			}
-
-		});
-
+	public HtmlWidgetsReport(ReportDSL reportDsl) {
+		this.reportDsl = reportDsl;
+		output = reportDsl.getOutput();
 	}
 
-	public void addInstance(WidgetInstance instance) {
-		instances.add(instance);
+	public void title(String title) {
+		this.title = title;
 	}
 
-	protected IWidget importWidget(String id) {
-		IWidget widget = importedWidgets.get(id);
-		if (widget == null) {
-			widget = WidgetFactory.createWidget(id, this);
-			importedWidgets.put(id, widget);
+	public void selfContained(boolean selfContained){
+		this.selfContained = selfContained;
+	}
+
+	public void setOutput(File output) {
+		this.output = output;
+	}
+
+	public void output(File output){
+		this.output = output;
+	}
+
+	public void output(String output){
+		this.output = new File(output);
+	}
+
+	public void template(String template){
+		if (!template.startsWith("/")){
+			this.templateDirectory = "/templates/" + template;
+		} else {
+			this.templateDirectory = template;
 		}
-		return widget;
 	}
 
-	protected String getHead(IWidget widget) {
-		final IncludeStyleFunction styleFunction = new IncludeStyleFunction(this);
-		String html = "<!-- Widget: " + widget.getId() + " -->\n";
+	public void template(File template){
+		if (template.isAbsolute()){
+			templateDirectory = template.getAbsoluteFile().getParent();
+		} else {
+			String relativeTemplateDirectory = template.getParent();
+			templateDirectory = reportDsl.getBaseDir() + "/" + relativeTemplateDirectory;
+		}
+		templateIndex = template.getName();
+		this.useClassPath = false;
+	}
+
+	public File file(Map<String, Object> params, String filename){
+		File result = new File(filename);
+		if (!result.isAbsolute()){
+			result = new File(reportDsl.getBaseDir(), result.getPath());
+		}
+		boolean checkIfExists = (boolean)params.getOrDefault("checkIfExists",false);
+		if (checkIfExists && !result.exists()){
+			throw new RuntimeException("File '" + filename + "' not found.");
+		}
+		return result;
+	}
+
+	public File file(String filename){
+		return file(new HashMap<String, Object>(), filename);
+	}
+
+	public File path(String filename){
+		return path(new HashMap<String, Object>(), filename);
+	}
+
+	public File path(Map<String, Object> params, String filename){
+		return file(params, filename);
+	}
+
+	public HtmlBlock addBlock(String name, Closure closure){
+		HtmlBlock block = new HtmlBlock(this, name);
+		block.build(closure);
+		blocks.add(block);
+		return block;
+	}
+
+	public void render() throws IOException {
+
+		HtmlReport report = new HtmlReport(templateDirectory, useClassPath);
+		report.setMainFilename(templateIndex);
+		report.setSelfContained(selfContained);
+		report.set("title", title);
+		report.set("head", getHead(report));
+		for (String variable: variables.keySet()) {
+			report.set(variable, variables.get(variable));
+		}
+		report.set("script", getScript(report));
+		report.generate(output);
+	}
+
+	private void importWidget(IWidget widget) {
+        importedWidgets.putIfAbsent(widget.getKeyword(), widget);
+	}
+
+	public void addWidget(IWidget widget){
+		importedWidgets.putIfAbsent(widget.getKeyword(), widget);
+		instances.add(widget);
+	}
+
+	protected String getHead(HtmlReport report, IWidget widget) {
+		final IncludeStyleFunction styleFunction = new IncludeStyleFunction(report);
+		StringBuilder html = new StringBuilder("<!-- Widget: " + widget.getKeyword() + " -->\n");
 		for (String style : widget.getStyles()) {
-			html += styleFunction.apply(style) + "\n";
+			html.append(styleFunction.apply(style)).append("\n");
 		}
-		return html;
+		return html.toString();
 	}
 
-	protected String getHead() {
-		String head = "";
+	public String getHead(HtmlReport report) {
+		StringBuilder head = new StringBuilder();
 		for (IWidget widget : importedWidgets.values()) {
-			head += getHead(widget);
+			head.append(getHead(report, widget));
 		}
-		return head;
+		return head.toString();
 	}
 
-	protected String getScript() {
+	public String getScript(HtmlReport report) {
 
-		final IncludeScriptFunction scriptFunction = new IncludeScriptFunction(this);
+		final IncludeScriptFunction scriptFunction = new IncludeScriptFunction(report);
 
 		// activate and init only imported widgets
-		String html = "";
+		StringBuilder html = new StringBuilder();
 
 		for (IWidget widget : importedWidgets.values()) {
-			html += "\n";
-			html += "<!-- Widget: " + widget.getId() + " -->\n";
+			html.append("\n");
+			html.append("<!-- Widget: ").append(widget.getKeyword()).append(" -->\n");
 			for (String script : widget.getScripts()) {
-				html += scriptFunction.apply(script) + "\n";
+				html.append(scriptFunction.apply(script)).append("\n");
 			}
 		}
 
-		html += "\n";
-		html += "<!-- Init Widgets -->\n";
-		html += "<script>\n";
-		html += "$(document).ready( function () {\n";
-		for (WidgetInstance instance : instances) {
-			html += "\n";
-			html += instance.getScript();
+		html.append("\n");
+		html.append("<!-- Init Widgets -->\n");
+		html.append("<script>\n");
+		html.append("$(document).ready( function () {\n");
+		for (IWidget instance : instances) {
+			html.append("\n");
+			html.append(instance.getInitScript());
 		}
-		html += "});\n";
-		html += "</script>";
+		html.append("});\n");
+		html.append("</script>");
 
-		return html;
+		return html.toString();
 	}
 
+	@Override
+	public Object getProperty(String propertyName) {
+		return GroovyObject.super.getProperty(propertyName);
+	}
+
+	@Override
+	public void setProperty(String propertyName, Object newValue) {
+		GroovyObject.super.setProperty(propertyName, newValue);
+	}
+
+	// never persist the MetaClass
+	private transient MetaClass metaClass = getDefaultMetaClass();
+
+	@Override
+	@Transient
+	public MetaClass getMetaClass() {
+		return this.metaClass;
+	}
+
+	@Override
+	public void setMetaClass(/* @Nullable */ final MetaClass metaClass) {
+		this.metaClass = Optional.ofNullable(metaClass).orElseGet(this::getDefaultMetaClass);
+	}
+
+	private MetaClass getDefaultMetaClass() {
+		return InvokerHelper.getMetaClass(this.getClass());
+	}
+
+	public Object invokeMethod(String name, Object args) {
+		try {
+			return GroovyObject.super.invokeMethod(name, args);
+		} catch (groovy.lang.MissingMethodException e) {
+			List list = InvokerHelper.asList(args);
+			if (list.isEmpty()){
+				throw e;
+			} else if (list.size() > 1){
+				throw new RuntimeException("Parameter '" + name + "'. More than one parameter: " + list);
+			}
+			Object arg = list.get(0);
+			if (arg instanceof  Closure){
+				// If closure, render as html block and add html to template
+				HtmlBlock block = addBlock(name, (Closure) arg);
+				variables.put(block.getName(), block.getContent());
+			} else {
+				// all other objects are passed to template
+				variables.put(name, arg);
+			}
+			return null;
+		}
+	}
 }

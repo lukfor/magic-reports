@@ -1,0 +1,118 @@
+import tech.tablesaw.api.*
+import tech.tablesaw.columns.*
+import org.apache.commons.math3.stat.regression.SimpleRegression
+
+include "components/bootstrap_header.report"
+include "components/bootstrap_table.report"
+include "components/bootstrap_card.report"
+include "components/bootstrap_tabs.report"
+include "components/bootstrap_footer.report"
+
+
+// Function to perform regression analysis
+def performRegressionAnalysis(xData, yData) {
+    def regression = new SimpleRegression()
+    for (int i = 0; i < xData.size(); i++) {
+        regression.addData(xData[i], yData[i])
+    }
+    return regression
+}
+
+def primary = "#82715f6e"
+
+def whisky = Table.read().csv("$baseDir/whisky.csv")
+whisky = whisky.dropRowsWithMissingValues()
+
+// Regression Analysis
+def regressionPrice = performRegressionAnalysis(
+    whisky.column("Rating").asList(),
+    whisky.column("Price").asList()
+)
+
+def regressionAge = performRegressionAnalysis(
+    whisky.column("Rating").asList(),
+    whisky.column("Age").asList()
+)
+
+report {
+
+    template "bootstrap"
+
+    header {
+        bootstrap_header (
+            title: "Whiskies",
+            description: "This report displays information about different whiskies,<br>including their brand, region, rating, and price.",
+            color: primary
+        )
+    }
+
+    content {
+
+        bootstrap_card (title: "Rating vs Price") {
+            bootstrap_tabs {
+                bootstrap_tab(title: "Scatter Plot") {
+                    plotly {
+                        scatter(
+                            x: whisky.column("Rating").asList(),
+                            y: whisky.column("Price").asList(),
+                            text: whisky.column("Name").asList()
+                        )
+                    }
+                }
+                bootstrap_tab(title: "Regression Analysis") {
+                    ul {
+                        li("Slope: ${regressionPrice.getSlope()}")
+                        li("Intercept: ${regressionPrice.getIntercept()}")
+                        li("R-squared: ${regressionPrice.getRSquare()}")
+                    }
+                }
+            }
+        }
+
+        bootstrap_card (title: "Rating vs Age") {
+            bootstrap_tabs {
+                bootstrap_tab(title: "Scatter Plot") {
+                    plotly {
+                        scatter(
+                            x: whisky.column("Age").asList(),
+                            y: whisky.column("Price").asList(),
+                            text: whisky.column("Name").asList()
+                        )
+                    }
+                }
+                bootstrap_tab(title: "Regression Analysis") {
+                    ul {
+                        li("Slope: ${regressionAge.getSlope()}")
+                        li("Intercept: ${regressionAge.getIntercept()}")
+                        li("R-squared: ${regressionAge.getRSquare()}")
+                    }
+                }
+            }
+        }
+
+        bootstrap_card (title: "Whiskys by Country") {
+            plotly {
+                histogram (
+                      x: whisky.column("Country").asList(),
+                      marker: [
+                        color: "#aaaaaa"
+                     ]
+                )
+                layout(
+                    xaxis: [
+                        title: "Country"
+                    ]
+                )
+            }
+        }
+    }
+
+    footer {
+        bootstrap_footer(
+            text: "This report was created by ${System.getProperty("user.name")} on ${new Date()}",
+            color: primary
+        )
+    }
+
+}
+

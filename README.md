@@ -1,125 +1,26 @@
-# magic-reports
+# Magic-Reports 🪄
 
-> A java library to generate self-containing html reports and dashboards
+Reporting and data visualization is key in data science. Magic-Reports is a Domain Specific Language (DSL) designed to simplify the creation of HTML reports with rich visualizations and structured content. The DSL allows users to define data, plots, and other report elements in a simple and modular way.
 
-Reporting and data visualization is key in data science. `magic-reports` provides a simple template based library to create self-containing html reports.
-
-## Installation
-
-Add the following dependency to your Maven Project:
-
-    <dependency>
-      <groupId>com.github.lukfor</groupId>
-      <artifactId>magic-reports</artifactId>
-      <version>0.0.1</version>
-    </dependency>
-
-Or include it as a dependency in your Gradle project:
-
-    compile 'com.github.lukfor:magic-reports:0.0.1'
+- **Simplified Syntax:** Intuitive constructs for HTML elements to reduce verbosity.<br/>
+-  **Data Binding:** Easily incorporate dynamic data into your reports.<br/>
+-  **Conditional Rendering:** Streamlined syntax for conditional content.<br/>
+-  **Loops:** Simplified iteration for repetitive elements.<br/>
+-  **Integrated Visualizations:** Out of the Box support for datatables, bootstrap and plotly.<br/>
+-  **No JavaScript Required:** Create powerful reports without the need for JavaScript knowledge.<br/>
+-  **Components:** Define reusable components to enhance code organization.<br/>
+-  **Custom Styling:** Apply custom styles to elements easily for a personalized look.
 
 
-## Create your first report
+The documentation can be found [here](https://forer.it/magic-reports).
 
-```java
+## Support us
 
-List<Person> persons = ...;
+We love stars as much as we love rockets! So make sure you [star us on GitHub](https://github.com/lukfor/magic-reports).
 
-HtmlWidgetReport report = new HtmlWidgetReport("/example");
-report.set("persons", persons);
-report.generate(new File("example.html"));
-```
+## About
 
-## Widgets
-
-### datatables
-
-```
-{{import_widget("data_table")}}
-```
-
-```
-{{
-	data_table({
-		columns: [
-		   		{data: "firstName", title: "First Name"},
-		   		{data: "lastName", title: "Last Name"},
-		   		{data: "email", title: "E-Mail"}
-		],
-		data: persons
-	})
-}}
-```
-
-### plotly
-
-```
-{{import_widget("plotly")}}
-```
-
-```
-{{
-	plotly({
-		traces: [{
-		  x: array(persons).extract("age"),
-		  y: array(persons).extract("salary"),
-		  mode: "markers",
-		  type: "scatter"
-		}],
-		layout: {
-			plot_bgcolor: "rgba(255,255,255,1)"
-		}
-	})
-}}
-```
-
-### vega-lite
-
-```
-{{import_widget("vega_lite")}}
-```
-
-```
-{{
-  vega_lite({
-      $schema: "https://vega.github.io/schema/vega-lite/v4.json",
-      data: {
-        values: {{json(persons)}}
-      },
-      mark: "point",
-      encoding: {
-        x: {
-          field: "age",
-          type: "quantitative"
-        },
-        y: {
-          field: "salary",
-          type: "quantitative"
-        }
-      },
-      width: 1000
-  })
-}}
-```
-
-## Helpers
-
-### Javascript Helpers
-
-- `import_script("path_or_url/to/script.js")`
-- `array(object).extract("property")`
-- `json(object)`
-
-### CSS Helpers
-
-- `import_style("path_or_url/to/style.css")`
-
-### CSS Helpers
-
-- `import_style("path_or_url/to/style.css")`
+magic-reports has been created by [Lukas Forer](https://twitter.com/lukfor) and is MIT Licensed.
 
 
-
-## License
-
-`magic-reports` is MIT Licensed.
+[![@lukfor](https://avatars.githubusercontent.com/u/210220?s=64&v=4)](https://github.com/lukfor)

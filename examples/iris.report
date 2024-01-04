@@ -1,0 +1,110 @@
+import tech.tablesaw.api.*
+import tech.tablesaw.columns.*
+
+include "components/bootstrap_header.report"
+include "components/bootstrap_table.report"
+include "components/bootstrap_card.report"
+include "components/bootstrap_tabs.report"
+include "components/bootstrap_footer.report"
+
+def iris = Table.read().csv("$baseDir/iris.csv")
+def primary = "#546d78"
+
+report {
+
+    template "bootstrap"
+	title "Iris"
+
+    header {
+        bootstrap_header (
+            title: "Iris Dataset",
+            description:
+            """
+            The Iris dataset is a well-known dataset in the field of machine learning and statistics.
+            It was introduced by the biologist and statistician Ronald A. Fisher in 1936. The dataset consists of
+            measurements of four features (sepal length, sepal width, petal length, and petal width) for 150 iris
+            flowers, divided into three species: setosa, versicolor, and virginica
+            """,
+            color: primary
+        )
+    }
+
+    content {
+
+        bootstrap_card (title: "Dataset") {
+            datatable (
+                data: iris,
+                bLengthChange: false,
+                bFilter: false
+            )
+        }
+
+        bootstrap_card (title: "Relation between variables") {
+            p "We will see the relationship between the sepal length and sepal width and also between petal length and petal width."
+            plotly {
+                for (table in iris.splitOn(iris.categoricalColumn("class"))){
+                    scatter (
+                          x: table.column("sepallength").asList(),
+                          y: table.column("sepalwidth").asList(),
+                          text: table.column("class").asList(),
+                          name: table.column("class").asList()[0]
+                    )
+                }
+            }
+
+            plotly {
+                box (
+                      y: iris.column("sepallength").asList(),
+                      x: iris.column("class").asList()
+                )
+            }
+
+        }
+
+        bootstrap_card (title: "Distribution") {
+
+            plotly {
+                def classes = iris.splitOn(iris.categoricalColumn("class"))
+                for (table in classes){
+                    histogram (
+                        x: table.column("sepallength").asList(),
+                        name: table.column("class").asList()[0],
+                        opacity: 0.5
+                    )
+                }
+                layout (
+                    barmode: "overlay"
+                )
+            }
+        }
+
+        bootstrap_card (title: "Distribution by Class") {
+            bootstrap_tabs {
+                for (def className in iris.column("class").asSet()) {
+                   bootstrap_tab(title: className) {
+                        def filteredData = iris.where(iris.stringColumn("class").isEqualTo(className))
+                        h3 "${className}"
+                        plotly {
+                            histogram (
+                                  x: filteredData.column("sepallength").asList(),
+                                  marker: [
+                                    color: "#aaaaaa"
+                                 ]
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    footer {
+        bootstrap_footer(
+            text: "This report was created by ${System.getProperty("user.name")} on ${new Date()}",
+            color: primary
+        )
+    }
+
+}
+

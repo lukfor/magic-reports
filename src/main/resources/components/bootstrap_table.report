@@ -1,0 +1,21 @@
+component("bootstrap_table") {
+    def headerRow = options.data[0]
+    table(class: "table table-bordered table-striped") {
+        thead {
+            tr {
+                for (String header : headerRow) {
+                    th(header)
+                }
+            }
+        }
+        tbody {
+            for (int i = 1; i < options.data.size(); i++) {
+                tr {
+                    for (String cell : options.data[i]) {
+                        td(cell)
+                    }
+                }
+            }
+        }
+    }
+}

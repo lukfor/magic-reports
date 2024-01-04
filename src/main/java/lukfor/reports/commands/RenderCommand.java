@@ -15,11 +15,11 @@ import java.util.concurrent.Callable;
 public class RenderCommand implements Callable<Integer> {
 
     @Option(names = {
-            "--input","-i" }, description = "Input file", required = true)
+            "-i" }, description = "Input file", required = true)
     private File input = null;
 
     @CommandLine.Option(names = {
-            "--output","-o" }, description = "Output file", required = true)
+            "-o" }, description = "Output file", required = false)
     private File output = null;
 
     @CommandLine.Unmatched()

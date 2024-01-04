@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class FileUtil {
 
@@ -71,6 +73,25 @@ public class FileUtil {
 		URI uri = URI.create(path);
 		String resolvedPath =  uri.resolve("").toString() + filename;
 		return resolvedPath;
+	}
+
+	public static void createMissingFolders(File file) {
+		// Convert File to Path
+		Path filePath = file.toPath();
+
+		// Get the parent directory of the file
+		Path parentDirectory = filePath.getParent();
+
+		if (parentDirectory != null) {
+			try {
+				// Create missing folders if they don't exist
+				Files.createDirectories(parentDirectory);
+				System.out.println("Folders created successfully: " + parentDirectory);
+			} catch (Exception e) {
+				// Handle exceptions, e.g., IOException
+				System.err.println("Error creating folders: " + e.getMessage());
+			}
+		}
 	}
 
 }

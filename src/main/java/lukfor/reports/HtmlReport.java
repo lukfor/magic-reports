@@ -128,6 +128,9 @@ public class HtmlReport {
 	}
 	
 	public void generate(File outputFile) throws IOException {
+
+		FileUtil.createMissingFolders(outputFile);
+
 		if (useClasspath) {
 			System.out.println("Process resource " + inputDirectory + "/" + mainFilename + "...");
 		}else {

@@ -33,6 +33,11 @@ public class RenderCommandTest extends TestCase {
 		assertEquals(0, exitCode);
 	}
 
+	public void testMultiPage() throws Exception {
+		App app = new App();
+		int exitCode = app.run("render","-i","test-data/report05/report05.report","--output","results");
+		assertEquals(0, exitCode);
+	}
 
 	public void testExample() throws Exception {
 		App app = new App();

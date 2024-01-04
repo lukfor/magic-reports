@@ -1,7 +1,0 @@
-component("bootstrap_footer") {
-
-    footer(class: "px-4 py-5 text-center border-top", style:"background-color: ${options.color}"){
-        small(class: "mb-3 mb-md-0", options.text)
-    }
-
-}

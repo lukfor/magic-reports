@@ -12,7 +12,7 @@ Reporting and data visualization is key in data science. Magic-Reports is a Doma
 -  **Custom Styling:** Apply custom styles to elements easily for a personalized look.
 
 
-The documentation can be found [here](https://forer.it/magic-reports).
+The documentation can be found [here](https://www.forer.it/magic-reports).
 
 ## Support us
 

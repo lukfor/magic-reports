@@ -139,7 +139,7 @@ public class HtmlReport {
 
 		createdOn = new Date();
 
-		context.set("report", this);
+		//context.set("report", this);
 
 		context.set("include_style", new IncludeStyleFunction(this));
 		context.set("import_style", new IncludeStyleFunction(this));

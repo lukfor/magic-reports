@@ -10,13 +10,13 @@ Assume you have a template named "template.html" structured as follows:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
+    <title>{{report.title}}</title>
 </head>
 <body>
     <div class="container">
-        <h1>{{title}}</h1>
+        <h1>{{report.title}}</h1>
         <div class="content">
-            {{content}}
+            {{report.content}}
         </div>
     </div>
 </body>
@@ -72,18 +72,18 @@ Assume you have a template named "custom_template.html" structured as follows:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{pageTitle}}</title>
+    <title>{{report.pageTitle}}</title>
 </head>
 <body>
     <div class="wrapper">
         <header>
-            <h1>{{headerTitle}}</h1>
+            <h1>{{report.headerTitle}}</h1>
         </header>
         <main>
-            {{mainContent}}
+            {{report.mainContent}}
         </main>
         <footer>
-            <p>{{footerText}}</p>
+            <p>{{report.footerText}}</p>
         </footer>
     </div>
 </body>

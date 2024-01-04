@@ -44,6 +44,10 @@ public class RenderCommand implements Callable<Integer> {
             }
         }
 
+        if (output == null) {
+            output = new File(input.getAbsolutePath().replaceAll("\\.report","\\.html"));
+        }
+
         ReportParser.run(input, output, paramMap);
 
         return 0;

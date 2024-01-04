@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
-<title>{{title}}</title>
+<title>{{report.title}}</title>
 {{import_style("css/github-markdown.min.css")}}
 {{import_style("css/index.css")}}
 
@@ -16,21 +16,21 @@
 				padding: 45px;
 			}
 		</style>
-{{head}}
+{{report.head}}
 </head>
 <body>
 <article class="markdown-body">
-      <h1>{{title}}</h1>
-	  {{header}}
-	{{content1}}
-      {{content}}
+      <h1>{{report.title}}</h1>
+	  {{report.header}}
+	{{report.content1}}
+      {{report.content}}
 </article>
 <ul>
-	{{for a in myage}}
+	{{for a in report.myage}}
 	<li>{{a}}</li>
 	{{end}}
 </ul>
-{{script}}
+{{report.script}}
 
 </body>
 </html>

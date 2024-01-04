@@ -27,8 +27,6 @@ public class HtmlWidgetsReport implements GroovyObject {
 
 	private List<HtmlBlock> blocks = new Vector<HtmlBlock>();
 
-	private String title = "Report";
-
 	private String templateDirectory = "/templates/github-readme";
 
 	private String templateIndex= "index.html";
@@ -46,10 +44,6 @@ public class HtmlWidgetsReport implements GroovyObject {
 	public HtmlWidgetsReport(ReportDSL reportDsl) {
 		this.reportDsl = reportDsl;
 		output = reportDsl.getOutput();
-	}
-
-	public void title(String title) {
-		this.title = title;
 	}
 
 	public void selfContained(boolean selfContained){
@@ -123,12 +117,9 @@ public class HtmlWidgetsReport implements GroovyObject {
 		HtmlReport report = new HtmlReport(templateDirectory, useClassPath);
 		report.setMainFilename(templateIndex);
 		report.setSelfContained(selfContained);
-		report.set("title", title);
-		report.set("head", getHead(report));
-		for (String variable: variables.keySet()) {
-			report.set(variable, variables.get(variable));
-		}
-		report.set("script", getScript(report));
+		variables.put("head", getHead(report));
+		variables.put("script", getScript(report));
+		report.set("report", variables);
 		report.generate(output);
 	}
 

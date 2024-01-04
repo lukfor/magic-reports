@@ -1,0 +1,9 @@
+report {
+    title "My First Magic-Report"
+
+    content {
+        h2("Hello, Magic-Reports!")
+
+        p("This is a simple Magic-Report. You can add content, charts, and more.")
+    }
+}

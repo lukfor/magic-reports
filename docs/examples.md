@@ -38,10 +38,7 @@ You can create a single Groovy file containing multiple reports by setting the o
 report {  
     template "bootstrap"  
     output "${params.output}/pages/report1.html"  
-  
-    header ""  
-    footer ""  
-  
+
     content {  
         h2 "Content of Report 1"  
         p "This is the content of Report 1."  
@@ -52,10 +49,7 @@ report {
 report {  
     template "bootstrap"  
     output "${params.output}/pages/report2.html"  
-  
-    header ""  
-    footer ""  
-  
+
     content {  
         h2 "Content of Report 2"  
         p "This is the content of Report 2."  
@@ -65,10 +59,7 @@ report {
 // Index Page  
 report {  
     template "bootstrap"  
-    output "${params.output}/index.html"  
-  
-    header ""  
-    footer ""  
+    output "${params.output}/index.html"
   
     content {  
         div(class: "container-fluid") {  

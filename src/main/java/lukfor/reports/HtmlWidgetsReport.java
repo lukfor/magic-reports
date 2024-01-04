@@ -29,7 +29,7 @@ public class HtmlWidgetsReport implements GroovyObject {
 
 	private String title = "Report";
 
-	private String templateDirectory = "/templates/default";
+	private String templateDirectory = "/templates/github-readme";
 
 	private String templateIndex= "index.html";
 

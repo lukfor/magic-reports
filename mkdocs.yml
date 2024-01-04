@@ -45,7 +45,7 @@ nav:
       - Creating Components: docs/creating-components.md
       - Creating Templates: docs/creating-templates.md
   - Templates:
-    - Home: templates/index.md
+    - Home: themes/index.md
   - Components:
     - Home:  components/index.md
     - Bootstrap: components/bootstrap.md

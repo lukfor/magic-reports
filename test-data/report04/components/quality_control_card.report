@@ -1,0 +1,20 @@
+include "components/bootstrap_card.report"
+include "components/bootstrap_summary_qc.report"
+include "components/bootstrap_parameters_table.report"
+
+component("quality_control_card") {
+
+   bootstrap_card (title: "Quality Control") {
+        bootstrap_summary_qc(
+            passed: options.passed,
+            warnings: options.warnings,
+            errors: options.errors
+       )
+
+        // Use the Bootstrap parameters table component
+        bootstrap_parameters_table(
+            parameters: options.parameters
+        )
+    }
+
+}

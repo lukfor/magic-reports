@@ -1,0 +1,13 @@
+component("bootstrap_summary_qc") {
+    div(class: "progress") {
+        div(class: "progress-bar bg-success", style: "width:${options.passed}%")
+        div(class: "progress-bar bg-warning", style: "width:${options.warnings}%")
+        div(class: "progress-bar bg-danger", style: "width:${options.errors}%")
+    }
+
+    div(style: "margin-top: 15px;") {
+        i(class: "fas fa-check-circle text-success", "Passed: ${options.passed}  ")
+        i(class: "fas fa-exclamation-triangle text-warning", "Warnings: ${options.warnings}  ")
+        i(class: "fas fa-exclamation-circle text-danger", "Failed: ${options.errors}")
+    }
+}

@@ -1,9 +1,15 @@
-include "$baseDir/components/bootstrap_header.report"
-include "$baseDir/components/bootstrap_table.report"
-include "$baseDir/components/bootstrap_card.report"
-include "$baseDir/components/bootstrap_tabs.report"
-include "$baseDir/components/bootstrap_footer.report"
+include "components/bootstrap_header.report"
+include "components/bootstrap_table.report"
+include "components/bootstrap_card.report"
+include "components/bootstrap_tabs.report"
+include "components/bootstrap_footer.report"
 
+include "components/bootstrap_summary_qc.report"
+include "components/bootstrap_parameters_table.report"
+include "components/bootstrap_progress.report"
+
+//local component from file
+include "${baseDir}/components/quality_control_card.report"
 
 def irisData = [
     ["Sepal Length", "Sepal Width", "Petal Length", "Petal Width", "Species"],
@@ -50,6 +56,70 @@ report {
                 }
             }
         }
+
+        // Using a Card Component to display the Iris dataset
+        bootstrap_card (title: "Dataset") {
+            p "Frequency (0.25)"
+            bootstrap_progress(progress: 0.25 * 100, class: "my-3")
+            bootstrap_progress(progress: 0.30 * 100, color: 'warning', height: "5px", class: "my-3")
+            bootstrap_progress(progress: 0.30 * 100, color: 'primary', label: true)
+        }
+
+        // Using a Card Component to display the Iris dataset
+        bootstrap_card (title: "Quality Control") {
+            bootstrap_summary_qc(passed: 80, warnings: 15, errors: 5)
+
+            // Define parameters as a Map
+            def parameters = [
+                "Files": "1",
+                "Samples": "50",
+                "Input Variants": "3,892",
+                "Reference Mismatches": "0",
+                "Tree Overlap (%)": "78.3",
+                "Strand Flips": "0",
+                "Out Of Range Variants": "0",
+                "Multiallelic Variants": "275",
+                "Indel Variants": "20",
+                "VCF Filtered Variants": "0",
+                "Duplicate Variants": "0",
+                "Low Sample Call Rate": "0",
+                "Monomorphic Variants": "3,160",
+                "Variant Call Rate < 90%": "0"
+            ]
+
+            // Use the Bootstrap parameters table component
+            bootstrap_parameters_table(parameters: parameters)
+        }
+
+        // Using a Card Component to display the Iris dataset
+        quality_control_card (
+            passed: 80,
+            warnings: 15,
+            errors: 5,
+            parameters: [
+                "Files": "1",
+                "Samples": "50",
+                "Input Variants": "3,892",
+                "Reference Mismatches": "0",
+                "Tree Overlap (%)": "78.3",
+                "Strand Flips": "0",
+                "Out Of Range Variants": "0",
+                "Multiallelic Variants": "275",
+                "Indel Variants": "20",
+                "VCF Filtered Variants": "0",
+                "Duplicate Variants": "0",
+                "Low Sample Call Rate": "0",
+                "Monomorphic Variants": "3,160",
+                "Variant Call Rate < 90%": "0"
+            ]
+        )
+
+        // Using a Card Component to display the Iris dataset
+        quality_control_card (
+            passed: 80,
+            warnings: 15,
+            errors: 5
+        )
 
         // Using a Card Component to display the Iris dataset
         bootstrap_card (title: "Dataset") {

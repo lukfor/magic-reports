@@ -1,0 +1,24 @@
+component("bootstrap_progress") {
+
+    def defaults = [
+        color: "success",
+        label: false,
+        height: null,
+        class: ""
+    ]
+
+    options = defaults  + options
+
+    def style = ""
+    if (options.height) {
+        style += "height: ${options.height};"
+    }
+
+    div(class: "progress ${options.class}", style: style) {
+        div(class: "progress-bar bg-${options.color}", role: "progressbar", ariaValuenow: options.progress, ariaValuemin: "0", ariaValuemax: "100", style: "width: ${options.progress}%") {
+            if (options.label) {
+                span(class: "sr-only", "${options.progress}% Complete")
+            }
+        }
+    }
+}

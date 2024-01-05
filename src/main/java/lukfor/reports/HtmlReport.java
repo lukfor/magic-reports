@@ -132,9 +132,9 @@ public class HtmlReport {
 		FileUtil.createMissingFolders(outputFile);
 
 		if (useClasspath) {
-			System.out.println("Process resource " + inputDirectory + "/" + mainFilename + "...");
+			System.out.println("Process resource " + inputDirectory + "/" + mainFilename);
 		}else {
-			System.out.println("Process file " + inputDirectory + "/" + mainFilename + "...");
+			System.out.println("Process file " + inputDirectory + "/" + mainFilename);
 		}
 
 		createdOn = new Date();
@@ -163,7 +163,7 @@ public class HtmlReport {
 		template.render(context, outputStream);
 		outputStream.close();
 
-		System.out.println("HTML Report written to " + outputFile.getAbsolutePath() + ".");
+		System.out.println("HTML Report written to " + outputFile.getAbsolutePath());
 
 	}
 	

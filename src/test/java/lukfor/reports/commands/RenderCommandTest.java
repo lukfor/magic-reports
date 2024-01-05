@@ -39,6 +39,12 @@ public class RenderCommandTest extends TestCase {
 		assertEquals(0, exitCode);
 	}
 
+	public void testNavbar() throws Exception {
+		App app = new App();
+		int exitCode = app.run("render","-i","test-data/report06/report06.report");
+		assertEquals(0, exitCode);
+	}
+
 	public void testExampleIris() throws Exception {
 		App app = new App();
 		int exitCode = app.run("render","-i","examples/iris.report","-o","docs/examples/iris.html");
@@ -48,6 +54,12 @@ public class RenderCommandTest extends TestCase {
 	public void testExampleWhisky() throws Exception {
 		App app = new App();
 		int exitCode = app.run("render","-i","examples/whisky.report","-o","docs/examples/whisky.html");
+		assertEquals(0, exitCode);
+	}
+
+	public void testExampleVcfStatistics() throws Exception {
+		App app = new App();
+		int exitCode = app.run("render","-i","examples/vcf-statistics.report","-o","docs/examples/vcf-statistics.html", "--vcf","examples/example.vcf.gz");
 		assertEquals(0, exitCode);
 	}
 

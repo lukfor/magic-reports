@@ -59,7 +59,7 @@ public class Component {
 		StringWriter writer = new StringWriter();
 		HtmlBlockBuilder builder = new HtmlBlockBuilder(report, writer);
 		closure.setProperty("options", options);
-		builder.build(Component.uniqueId(), closure);
+		builder.build(closure);
 		return writer.toString();
 	}
 

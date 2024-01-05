@@ -24,7 +24,7 @@ public class HtmlBlock {
 	}
 
 	public void build(Closure closure){
-		builder.build(name, closure);
+		builder.build(closure);
 	}
 
 	public String getContent(){

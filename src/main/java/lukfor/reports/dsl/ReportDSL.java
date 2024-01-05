@@ -23,6 +23,8 @@ public class ReportDSL extends Script {
 
     private String baseDir;
 
+    private String libDir;
+
     private File output;
 
     static {
@@ -60,7 +62,7 @@ public class ReportDSL extends Script {
         File file = new File(filename);
         if (file.exists()) {
             System.out.println("Include filename " + filename);
-            ReportParser.include(file);
+            ReportParser.include(file, libDir);
             return;
         }
 
@@ -69,8 +71,17 @@ public class ReportDSL extends Script {
             throw new RuntimeException("Component not found '" + filename + "'");
         }
 
-        ReportParser.include(stream);
+        ReportParser.include(stream, libDir);
 
+    }
+
+    public void exit(int code, String message){
+        System.out.println(message);
+        System.exit(code);
+    }
+
+    public void exit(String message){
+        exit(0, message);
     }
 
     @Override
@@ -97,5 +108,13 @@ public class ReportDSL extends Script {
 
     public File getOutput() {
         return output;
+    }
+
+    public void setLibDir(String libDir) {
+        this.libDir = libDir;
+    }
+
+    public String getLibDir() {
+        return libDir;
     }
 }

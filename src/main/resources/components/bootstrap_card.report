@@ -5,7 +5,7 @@ component("bootstrap_card") {
                 img(src: options.imageUrl, class: "card-img-top", alt: "Card image")
             }
             h5(class: "card-title", options.title)
-            div(class: "card-text", render(options.body))
+            div(class: "card-text", {render(options.body)})
         }
     }
 }

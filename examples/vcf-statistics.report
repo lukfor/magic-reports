@@ -1,0 +1,82 @@
+include "components/bootstrap_header.report"
+include "components/bootstrap_table.report"
+include "components/bootstrap_card.report"
+include "components/bootstrap_tabs.report"
+include "components/bootstrap_footer.report"
+include "components/bootstrap_parameters_table.report"
+
+if (!params.vcf) {
+    exit 1, "Please provide vcf file"
+}
+
+def vcf = VCF.load(params.vcf)
+
+component("row") {
+    div(class: "row") {
+        render(options.body)
+    }
+}
+
+component("column") {
+    def classes = "col-md-4"
+    if (options.size == 2){
+        classes = "col-md-8"
+    }
+    if (options.size == 3){
+        classes = "col-md-12"
+    }
+    div(class: "${classes} col-sm-12") {
+        render(options.body)
+    }
+}
+
+
+report {
+
+    template "bootstrap"
+	title "VCF Statistics"
+
+    header {
+        bootstrap_header (title: "VCF Statistics")
+    }
+
+    content {
+
+        row(){
+            column(size: 2) {
+                bootstrap_card (title: "Variants") {
+                    datatable(
+                        data: vcf.variants,
+                        columns: [
+                            [data: "contig", title: "Contig"],
+                            [data: "position", title: "Position"],
+                            [data: "ref", title: "Ref"],
+                            [data: "alt", title: "Alt"]
+                        ]
+                    )
+                }
+            }
+            column(size: 1) {
+                bootstrap_card (title: "File Information") {
+                    bootstrap_parameters_table(
+                        parameters: [
+                            "Filename": "${params.vcf}",
+                            "Variants": "${vcf.variants.size()}",
+                            "Samples": "${vcf.samples.size()}",
+                            "Contigs": "${vcf.contigs}"
+                       ]
+                    )
+                }
+            }
+        }
+
+    }
+
+    footer {
+        bootstrap_footer(
+            text: "This report was created by ${System.getProperty("user.name")} on ${new Date()}"
+        )
+    }
+
+}
+

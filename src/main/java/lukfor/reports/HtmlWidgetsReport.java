@@ -63,6 +63,11 @@ public class HtmlWidgetsReport implements GroovyObject {
 	}
 
 	public void template(String template){
+		if (new File(template).exists()){
+			template(new File(template));
+			return;
+		}
+
 		if (!template.startsWith("/")){
 			this.templateDirectory = "/templates/" + template;
 		} else {

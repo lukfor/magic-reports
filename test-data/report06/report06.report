@@ -1,0 +1,66 @@
+component("page") {
+    div(
+        id: options.id,
+        class: "tab-pane ${options.active ? "active" : ""}"
+    ) {
+        render(options.body)
+    }
+}
+
+component("navigation_item") {
+    li(class: "nav-item", role: "presentation") {
+        /*a(
+            class: "nav-link ${options.active ? "active" : ""}",
+            id: "${options.page}-tab",
+            "data-bs-toggle": "tab",
+            "href": "#${options.page}",
+            options.title
+        )*/
+        button(
+            class: "nav-link ${options.active ? 'active' : ''}",
+            id: "${options.page}-tab",
+            "data-bs-toggle": "tab",
+            "data-bs-target": "#${options.page}",
+            type:"button",
+            role:"tab",
+            "aria-controls": "${options.page}",
+            "aria-selected": options.active ? 'true' : 'false',
+            options.title
+        )
+
+    }
+}
+
+report {
+
+    template "${baseDir}/template/index.html"
+
+    title "Test Report"
+
+    // Define entries for the navbar
+    navigation {
+        navigation_item(title: "Page 1", page: "page1", active: true)
+        navigation_item(title: "Page 2", page: "page2")
+        navigation_item(title: "About", page: "about")
+    }
+
+    pages {
+
+        page(id: "page1", active: true){
+            h2 "Page 1"
+            p "This is content for Page 1."
+        }
+
+        page(id: "page2"){
+            h2 "Page 2"
+            p "This is content for Page 2."
+        }
+
+        page(id: "about"){
+            h2 "About"
+            p "This is report was created by ...."
+        }
+
+    }
+
+}

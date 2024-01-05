@@ -27,12 +27,10 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 		setEscapeAttributes(false);
 	}
 
-	public void build(String id, Closure closure){
+	public void build(Closure closure){
 		closure.setDelegate(this);
 		closure.setResolveStrategy(Closure.DELEGATE_FIRST);
-		Map<String, String> attributes = new HashMap<>();
-		attributes.put("id", id);
-		invokeMethod("div",  new Object[]{attributes, closure});
+		closure.call();
 	}
 
 	public void markdown(String text) {
@@ -46,9 +44,9 @@ public class HtmlBlockBuilder extends MarkupBuilder {
 	public void render(Closure template) {
 		StringWriter writer = new StringWriter();
 		HtmlBlockBuilder builder = new HtmlBlockBuilder(report, writer);
-		builder.build(Component.uniqueId(), template);
+		builder.build(template);
 		String html = writer.toString();
-		getMkp().yieldUnescaped(html);
+		getMkp().yieldUnescaped("\n" + html + "\n");
 	}
 
 	public void md(String text) {

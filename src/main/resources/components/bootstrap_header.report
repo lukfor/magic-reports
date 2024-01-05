@@ -1,9 +1,19 @@
 component("bootstrap_header") {
-    div(class: "px-4 py-5 text-center", style:"background-color: ${options.color}") {
+
+    def defaults = [
+        color: "#546d78",
+        text_color: "#ffffff"
+    ]
+
+    options = defaults  + options
+
+    div(class: "px-4 py-5 text-center", style:"background-color: ${options.color}; color: ${options.text_color};") {
         h1(class: "display-5 fw-bold", options.title)
-        div(class: "col-lg-6 mx-auto") {
-            p(class: "lead mb-4", ){
-                mkp.yieldUnescaped(options.description)
+        if (options.description) {
+            div(class: "col-lg-6 mx-auto") {
+                p(class: "lead mb-4", ){
+                    mkp.yieldUnescaped(options.description)
+                }
             }
         }
     }

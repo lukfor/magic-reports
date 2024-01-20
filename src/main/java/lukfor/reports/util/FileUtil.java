@@ -75,7 +75,7 @@ public class FileUtil {
 		return resolvedPath;
 	}
 
-	public static void createMissingFolders(File file) {
+	public static void createMissingFolders(File file) throws IOException {
 		// Convert File to Path
 		Path filePath = file.toPath();
 
@@ -83,14 +83,7 @@ public class FileUtil {
 		Path parentDirectory = filePath.getParent();
 
 		if (parentDirectory != null) {
-			try {
-				// Create missing folders if they don't exist
-				Files.createDirectories(parentDirectory);
-				System.out.println("Folders created successfully: " + parentDirectory);
-			} catch (Exception e) {
-				// Handle exceptions, e.g., IOException
-				System.err.println("Error creating folders: " + e.getMessage());
-			}
+			Files.createDirectories(parentDirectory);
 		}
 	}
 

@@ -16,6 +16,10 @@ public class ReportParser {
 
     public static void run(File file, File output, Map<String, String> params) throws Exception {
 
+        System.out.println("Render file " + file.getAbsoluteFile() + "...");
+
+        long time0 = System.currentTimeMillis();
+
         String libDir = file.getAbsoluteFile().getParentFile().getAbsolutePath() + "/lib";
         GroovyShell shell = createGroovyShell(libDir);
 
@@ -27,6 +31,10 @@ public class ReportParser {
         reportDsl.setOutput(output);
 
         script.run();
+
+        long time1 = System.currentTimeMillis();
+
+        System.out.println("Rendered in " + (time1 - time0) / 1000.0 + " secs\n");
 
     }
 
@@ -64,7 +72,6 @@ public class ReportParser {
         compilerConfiguration.addCompilationCustomizers(customizer);
         compilerConfiguration.setScriptBaseClass(ReportDSL.class.getName());
         compilerConfiguration.setClasspath(libDir);
-        System.out.println("LibDir: " + libDir);
         GroovyShell shell = new GroovyShell(ReportParser.class.getClassLoader(), compilerConfiguration);
         return shell;
     }

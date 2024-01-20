@@ -53,10 +53,10 @@ public class HtmlReport {
 		this.useClasspath = useClasspath;
 		this.inputDirectory = inputDirectory;
 		if (useClasspath) {
-			System.out.println("Template Loader: Classpath");
+			//System.out.println("Template Loader: Classpath");
 			this.loader = new MyClasspathTemplateLoader();
 		}else{
-			System.out.println("Template Loader: Files");
+			//System.out.println("Template Loader: Files");
 			this.loader = new TemplateLoader.FileTemplateLoader();
 		}
 		this.context = new TemplateContext();
@@ -132,9 +132,9 @@ public class HtmlReport {
 		FileUtil.createMissingFolders(outputFile);
 
 		if (useClasspath) {
-			System.out.println("Process resource " + inputDirectory + "/" + mainFilename);
+			System.out.println("Process template resource " + inputDirectory + "/" + mainFilename);
 		}else {
-			System.out.println("Process file " + inputDirectory + "/" + mainFilename);
+			System.out.println("Process template file " + inputDirectory + "/" + mainFilename);
 		}
 
 		createdOn = new Date();

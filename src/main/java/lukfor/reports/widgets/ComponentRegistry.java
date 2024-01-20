@@ -21,7 +21,7 @@ public class ComponentRegistry {
     }
 
     public void register(String keyword,Component component){
-        System.out.println("Register custom component " + keyword + "...");
+        //System.out.println("Register custom component " + keyword + "...");
         components.put(keyword, component);
     }
 

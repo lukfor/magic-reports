@@ -22,7 +22,7 @@ public class WidgetRegistry {
     }
 
     public void register(String keyword, Class<? extends IWidget> widget){
-        System.out.println("Register component " + keyword + "...");
+        //System.out.println("Register component " + keyword + "...");
         widgets.put(keyword, widget);
     }
 
@@ -31,7 +31,7 @@ public class WidgetRegistry {
     }
 
     public IWidget getInstance(String keyword){
-        System.out.println("Create instance of " + keyword);
+        //System.out.println("Create instance of " + keyword);
         Class<? extends IWidget> clazz = widgets.get(keyword);
         try {
             return clazz.getDeclaredConstructor().newInstance();

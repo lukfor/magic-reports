@@ -6,7 +6,7 @@ import lukfor.reports.widgets.Component;
 import lukfor.reports.HtmlWidgetsReport;
 import lukfor.reports.widgets.ComponentRegistry;
 import lukfor.reports.widgets.WidgetRegistry;
-import lukfor.reports.widgets.components.CardWidget;
+import lukfor.reports.widgets.plots.LeafletWidget;
 import lukfor.reports.widgets.plots.PlotlyWidget;
 import lukfor.reports.widgets.tables.DataTableWidget;
 
@@ -30,7 +30,7 @@ public class ReportDSL extends Script {
     static {
         WidgetRegistry.getInstance().register(DataTableWidget.KEYWORD, DataTableWidget.class);
         WidgetRegistry.getInstance().register(PlotlyWidget.KEYWORD, PlotlyWidget.class);
-        WidgetRegistry.getInstance().register(CardWidget.KEYWORD, CardWidget.class);
+        WidgetRegistry.getInstance().register(LeafletWidget.KEYWORD, LeafletWidget.class);
     }
 
     public ReportDSL() {
@@ -61,7 +61,7 @@ public class ReportDSL extends Script {
     public void include(String filename) throws Exception {
         File file = new File(filename);
         if (file.exists()) {
-            System.out.println("Include filename " + filename);
+            //System.out.println("Include filename " + filename);
             ReportParser.include(file, libDir);
             return;
         }

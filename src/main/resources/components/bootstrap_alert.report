@@ -1,0 +1,10 @@
+component("bootstrap_alert") {
+
+    options.type "danger"
+
+    div(
+        class: "alert alert-${options.type}",
+        role: "alert",
+        options.message
+    )
+}

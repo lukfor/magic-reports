@@ -1,5 +1,9 @@
 component("bootstrap_card") {
-    div(class: "card my-5") {
+    def style = ""
+    if (options.height) {
+        style += "height: ${options.height};"
+    }
+    div(class: "card my-5", style: style) {
         div(class: "card-body") {
             if (options.imageUrl) {
                 img(src: options.imageUrl, class: "card-img-top", alt: "Card image")

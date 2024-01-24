@@ -6,19 +6,82 @@
     <title>{{report.title != null ? report.title : "Magic Reports"}}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     {{report.head}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.0.0/turbolinks.min.js" crossorigin="anonymous" ></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
 <body>
 
 {{report.header}}
 
 <div class="container my-5">
-    {{report.content}}
+    {{if report.sidebar != null}}
+        <div class="row">
+            <div class="col-md-3 col-sm-12">
+                {{report.sidebar}}
+            </div>
+            <div class="col-md-9 col-sm-12">
+                {{report.content}}
+            </div>
+        </div>
+    {{else}}
+        {{report.content}}
+    {{end}}
 </div>
 
 {{report.footer}}
 
-<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 {{report.script}}
+
+
+<script>
+    $(document).ready(function () {
+      // Listen for changes on form inputs with data-magic-param=true
+      $("[data-magic-param=true]").on("change", function () {
+        // Create an object to store the form data
+        var params = {};
+        // Loop through all inputs with data-magic-param=true and add them to the formData object
+        $("[data-magic-param=true]").each(function () {
+          var paramName = $(this).attr("name");
+          if ($(this).is("input")) {
+            // Check if it's a checkbox
+            if ($(this).attr("type") === "checkbox") {
+              // Include checkbox value only if it's checked
+              if ($(this).prop("checked")) {
+                params[paramName] = "!magic-param:true";
+              } else {
+                params[paramName] = "!magic-param:false";
+              }
+            } else {
+              // For other input types (text, radio, etc.), include the value if it exists
+              if ($(this).val()) {
+                params[paramName] = $(this).val();
+              }
+            }
+          } else {
+            // For non-input elements, include the value if it exists
+            if ($(this).val()) {
+              params[paramName] = $(this).val();
+            }
+          }
+        });
+
+        var queryString = Object.keys(params)
+          .map(function (key) {
+            return (
+              encodeURIComponent(key) + "=" + encodeURIComponent(params[key])
+            );
+          })
+          .join("&");
+
+        // Get the current URL
+        var currentUrl = window.location.origin + window.location.pathname;
+        // Reload the page with the new URL containing parameters
+        //window.location.href = currentUrl + "?" + queryString;
+        Turbolinks.visit(currentUrl + "?" + queryString);
+      });
+    });
+</script>
+
 </body>
 </html>

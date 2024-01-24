@@ -1,0 +1,60 @@
+import tech.tablesaw.columns.*
+
+component("bootstrap_select"){
+    div(class: "form-group mt-3") {
+        if (options.label) {
+            label(class: "form-label", options.label)
+        }
+        //TODO: disable in static mode?
+        select(class: "form-select", id: "combobox", name: options.param, "data-magic-param" : true ) {
+            for (value in options.values) {
+                def properties = [
+                    value: value instanceof Column ? value.name() : value
+                ]
+                if (properties.value == params[options.param]) {
+                    properties.selected = "selected"
+                }
+                option(properties, properties.value)
+            }
+        }
+    }
+}
+
+component("bootstrap_number"){
+     div(class: "form-group") {
+        if (options.label) {
+            label(class: "form-label", options.label)
+        }
+        //TODO: disable in static mode?
+        input(type: "number", class: "form-control", id: "combobox", name: options.param, "data-magic-param" : true, value: params[options.param] ) {
+        }
+    }
+}
+
+component("bootstrap_text"){
+     div(class: "form-group") {
+        if (options.label) {
+            label(class: "form-label", options.label)
+        }
+        //TODO: disable in static mode?
+        input(class: "form-control", id: "combobox", name: options.param, "data-magic-param" : true, value: params[options.param] ) {
+        }
+    }
+}
+
+component("bootstrap_checkbox"){
+    div(class: "form-check") {
+        def properties = [
+            type: "checkbox",
+            class: "form-check-input",
+            id: "checkboxInput",
+            name: options.param,
+            "data-magic-param" : true
+        ]
+        if (params[options.param] == true) {
+            properties.checked = "checked"
+        }
+        input(properties)
+        label(class: "form-check-label", for: "checkboxInput", options.label)
+    }
+}

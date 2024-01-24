@@ -2,9 +2,17 @@ component("bootstrap_parameters_table") {
     table(class: "table table-sm") {
         tbody {
             options.parameters.each { key, value ->
-                tr(class: "small") {
-                    td key
-                    td value
+                def text = value
+                def warning = ""
+                def warningIcon = ""
+                if (value instanceof Map) {
+                    text = value.text
+                    warning = value.warning ? "fw-bold" : ""
+                    warningIcon = value.warning ? "(!!) " : ""
+                }
+                tr(class: "small ${warning}") {
+                    td warningIcon + key
+                    td text
                 }
             }
         }

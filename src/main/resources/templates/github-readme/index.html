@@ -6,6 +6,8 @@
 <title>{{report.title != null ? report.title : "Magic Report"}}</title>
 {{import_style("css/github-markdown.min.css")}}
 {{import_style("css/index.css")}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.0.0/turbolinks.min.js" crossorigin="anonymous" ></script>
+{{import_script("js/jquery-3.7.1.min.js")}}
 {{report.head}}
 </head>
 
@@ -17,8 +19,56 @@
       {{report.content}}
 </article>
 
-{{import_script("js/jquery-3.7.1.min.js")}}
 {{report.script}}
+
+<script>
+      $(document).ready(function () {
+        // Listen for changes on form inputs with data-magic-param=true
+        $("[data-magic-param=true]").on("change", function () {
+          // Create an object to store the form data
+          var params = {};
+          // Loop through all inputs with data-magic-param=true and add them to the formData object
+          $("[data-magic-param=true]").each(function () {
+            var paramName = $(this).attr("name");
+            if ($(this).is("input")) {
+              // Check if it's a checkbox
+              if ($(this).attr("type") === "checkbox") {
+                // Include checkbox value only if it's checked
+                if ($(this).prop("checked")) {
+                  params[paramName] = "!magic-param:true";
+                } else {
+                  params[paramName] = "!magic-param:false";
+                }
+              } else {
+                // For other input types (text, radio, etc.), include the value if it exists
+                if ($(this).val()) {
+                  params[paramName] = $(this).val();
+                }
+              }
+            } else {
+              // For non-input elements, include the value if it exists
+              if ($(this).val()) {
+                params[paramName] = $(this).val();
+              }
+            }
+          });
+
+          var queryString = Object.keys(params)
+            .map(function (key) {
+              return (
+                encodeURIComponent(key) + "=" + encodeURIComponent(params[key])
+              );
+            })
+            .join("&");
+
+          // Get the current URL
+          var currentUrl = window.location.origin + window.location.pathname;
+          // Reload the page with the new URL containing parameters
+          //window.location.href = currentUrl + "?" + queryString;
+          Turbolinks.visit(currentUrl + "?" + queryString);
+        });
+      });
+</script>
 
 </body>
 </html>

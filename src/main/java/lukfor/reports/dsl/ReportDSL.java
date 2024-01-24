@@ -19,7 +19,7 @@ public class ReportDSL extends Script {
 
     private File script;
 
-    private Map<String, String> params;
+    private ParamsMap params;
 
     private String baseDir;
 
@@ -55,14 +55,14 @@ public class ReportDSL extends Script {
 
 
     public void component(String name, final Closure closure) throws IOException {
-        ComponentRegistry.getInstance().register(name, new Component(name, closure));
+        ComponentRegistry.getInstance().register(name, new Component(name, this, closure));
     }
 
     public void include(String filename) throws Exception {
         File file = new File(filename);
         if (file.exists()) {
             //System.out.println("Include filename " + filename);
-            ReportParser.include(file, libDir);
+            ReportParser.include(file, libDir, params);
             return;
         }
 
@@ -71,7 +71,7 @@ public class ReportDSL extends Script {
             throw new RuntimeException("Component not found '" + filename + "'");
         }
 
-        ReportParser.include(stream, libDir);
+        ReportParser.include(stream, libDir, params);
 
     }
 
@@ -90,11 +90,11 @@ public class ReportDSL extends Script {
         return null;
     }
 
-    public void setParams(Map<String, String> params) {
+    public void setParams(ParamsMap params) {
         this.params = params;
     }
 
-    public Map<String, String> getParams() {
+    public Map<String, Object> getParams() {
         return params;
     }
 

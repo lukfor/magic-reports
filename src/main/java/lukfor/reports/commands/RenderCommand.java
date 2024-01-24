@@ -1,5 +1,6 @@
 package lukfor.reports.commands;
 
+import lukfor.reports.dsl.ParamsMap;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
 
@@ -29,7 +30,7 @@ public class RenderCommand implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
 
-        Map<String, String> params = RenderCommand.parseParams(unmatchedParams);
+        ParamsMap params = ParamsMap.buildFromArgs(unmatchedParams);
 
         if (output == null) {
             output = new File(input.getAbsolutePath().replaceAll("\\.report","\\.html"));
@@ -40,24 +41,4 @@ public class RenderCommand implements Callable<Integer> {
         return 0;
     }
 
-    public static Map<String, String> parseParams(List<String> unmatchedParams) {
-        Map<String, String> paramMap = new HashMap<>();
-
-        // Add unmatched parameters starting with --
-        if (unmatchedParams == null) {
-            return paramMap;
-        }
-
-        for (int i = 0; i < unmatchedParams.size(); i++) {
-            String param = unmatchedParams.get(i);
-            if (param.startsWith("--")) {
-                String key = param.substring(2);
-                String value = (i + 1 < unmatchedParams.size()) ? unmatchedParams.get(i + 1) : null;
-                paramMap.put(key, value);
-                i++; // Skip the next element as it has been consumed as the value
-            }
-        }
-
-        return paramMap;
-    }
 }

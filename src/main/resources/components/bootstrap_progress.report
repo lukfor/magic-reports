@@ -1,13 +1,9 @@
 component("bootstrap_progress") {
 
-    def defaults = [
-        color: "success",
-        label: false,
-        height: null,
-        class: ""
-    ]
-
-    options = defaults  + options
+    options.color = "success"
+    options.label = false
+    options.height = null
+    options.class = ""
 
     def style = ""
     if (options.height) {

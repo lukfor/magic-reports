@@ -1,11 +1,7 @@
 component("bootstrap_footer") {
 
-    def defaults = [
-        color: "#546d78",
-        text_color: "#ffffff"
-    ]
-
-    options = defaults  + options
+    options.color = "#546d78"
+    options.text_color = "#ffffff"
 
     footer(
         class: "px-4 py-5 text-center border-top",

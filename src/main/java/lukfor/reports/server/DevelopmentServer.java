@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
+import lukfor.reports.dsl.ParamsMap;
 import lukfor.reports.dsl.ReportParser;
 import org.springframework.boot.devtools.livereload.LiveReloadServer;
 
@@ -24,9 +25,9 @@ public class DevelopmentServer {
 
     private File output;
 
-    private Map<String, String> params;
+    private ParamsMap params;
 
-    public DevelopmentServer(File input, File output, Map<String, String> params) {
+    public DevelopmentServer(File input, File output, ParamsMap params) {
         this.input = input;
         this.output = output;
         this.params = params;
@@ -88,7 +89,14 @@ public class DevelopmentServer {
     }
 
     public void render() throws Exception {
-        ReportParser.run(input, output, params);
+        try {
+            ReportParser.run(input, output, params);
+        } catch (Exception e) {
+            //TODO: better error message
+            //e.printStackTrace();
+            String error = e.getMessage();
+            System.out.println("Error: " + error);
+        }
     }
 
 
@@ -98,9 +106,9 @@ public class DevelopmentServer {
 
         private File output;
 
-        private Map<String, String> defaultParams;
+        private ParamsMap defaultParams;
 
-        public MyHttpHandler(File input, File output, Map<String, String> defaultParams) {
+        public MyHttpHandler(File input, File output, ParamsMap defaultParams) {
             this.input = input;
             this.output = output;
             this.defaultParams = defaultParams;
@@ -134,7 +142,7 @@ public class DevelopmentServer {
 
             try {
 
-                Map<String, String> params = getQueryParams(query);
+                ParamsMap params = getQueryParams(query);
                 for (String param: defaultParams.keySet()) {
                     params.putIfAbsent(param, defaultParams.get(param));
                 }
@@ -151,6 +159,7 @@ public class DevelopmentServer {
                 //e.printStackTrace();
                 String error = e.getMessage();
                 System.out.println("Error: " + error);
+                e.printStackTrace();
                 exchange.sendResponseHeaders(500, 0);
                 exchange.getResponseBody().write(error.getBytes());
                 exchange.getResponseBody().close();
@@ -172,8 +181,8 @@ public class DevelopmentServer {
         }
 
 
-        private Map<String, String> getQueryParams(String queryString) {
-            Map<String, String> queryParams = new HashMap<>();
+        private ParamsMap getQueryParams(String queryString) {
+            ParamsMap queryParams = new ParamsMap();
 
             if (queryString != null) {
                 String[] pairs = queryString.split("&");
@@ -182,7 +191,17 @@ public class DevelopmentServer {
                     int idx = pair.indexOf("=");
                     String key = idx > 0 ? pair.substring(0, idx) : pair;
                     String value = idx > 0 && pair.length() > idx + 1 ? pair.substring(idx + 1) : null;
-                    queryParams.put(key, value);
+                    if (value != null && value.startsWith("!magic-param:")){
+                        if (value.equalsIgnoreCase("!magic-param:true")){
+                            queryParams.put(key, true);
+                        } else if (value.equalsIgnoreCase("!magic-param:false")) {
+                            queryParams.put(key, false);
+                        } else {
+                            throw new RuntimeException("Unknown value for parameter " + key + ": " + value);
+                        }
+                    } else {
+                        queryParams.put(key, value);
+                    }
                 }
             }
 

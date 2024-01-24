@@ -1,5 +1,6 @@
 package lukfor.reports.commands;
 
+import lukfor.reports.dsl.ParamsMap;
 import lukfor.reports.server.DevelopmentServer;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
@@ -35,7 +36,8 @@ public class ServeCommand implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
 
-        Map<String, String> params = RenderCommand.parseParams(unmatchedParams);
+        ParamsMap params = ParamsMap.buildFromArgs(unmatchedParams);
+        System.out.println(params);
 
         if (output == null) {
             output = new File(input.getAbsolutePath().replaceAll("\\.report","\\.html"));

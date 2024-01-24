@@ -151,6 +151,15 @@ public class HtmlWidgetsReport implements GroovyObject {
 		for (IWidget widget : importedWidgets.values()) {
 			head.append(getHead(report, widget));
 		}
+
+		final IncludeScriptFunction scriptFunction = new IncludeScriptFunction(report);
+		for (IWidget widget : importedWidgets.values()) {
+			head.append("\n");
+			head.append("<!-- Widget: ").append(widget.getKeyword()).append(" -->\n");
+			for (String script : widget.getScripts()) {
+				head.append(scriptFunction.apply(script)).append("\n");
+			}
+		}
 		return head.toString();
 	}
 
@@ -160,15 +169,6 @@ public class HtmlWidgetsReport implements GroovyObject {
 
 		// activate and init only imported widgets
 		StringBuilder html = new StringBuilder();
-
-		for (IWidget widget : importedWidgets.values()) {
-			html.append("\n");
-			html.append("<!-- Widget: ").append(widget.getKeyword()).append(" -->\n");
-			for (String script : widget.getScripts()) {
-				html.append(scriptFunction.apply(script)).append("\n");
-			}
-		}
-
 		html.append("\n");
 		html.append("<!-- Init Widgets -->\n");
 		html.append("<script>\n");

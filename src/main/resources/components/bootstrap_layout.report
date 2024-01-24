@@ -1,0 +1,12 @@
+component("row") {
+    div(class: "row") {
+        render(options.body)
+    }
+}
+
+component("column") {
+    options.size = 3
+    div(class: "col-md-${options.size} col-sm-12") {
+        render(options.body)
+    }
+}

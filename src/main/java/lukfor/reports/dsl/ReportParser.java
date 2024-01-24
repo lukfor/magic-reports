@@ -14,7 +14,7 @@ import java.util.Map;
 public class ReportParser {
 
 
-    public static void run(File file, File output, Map<String, String> params) throws Exception {
+    public static void run(File file, File output, ParamsMap params) throws Exception {
 
         System.out.println("Render file " + file.getAbsoluteFile() + "...");
 
@@ -29,7 +29,6 @@ public class ReportParser {
         reportDsl.setScript(file);
         reportDsl.setLibDir(libDir);
         reportDsl.setOutput(output);
-
         script.run();
 
         long time1 = System.currentTimeMillis();
@@ -38,12 +37,13 @@ public class ReportParser {
 
     }
 
-    public static void include(File file, String libDir) throws Exception {
+    public static void include(File file, String libDir, ParamsMap params) throws Exception {
 
         GroovyShell shell = createGroovyShell(libDir);
 
         Script script = shell.parse(file);
         ReportDSL reportDsl = (ReportDSL) script;
+        reportDsl.setParams(params);
         reportDsl.setLibDir(libDir);
         reportDsl.setScript(file);
 
@@ -51,12 +51,13 @@ public class ReportParser {
 
     }
 
-    public static void include(InputStream stream, String libDir) throws Exception {
+    public static void include(InputStream stream, String libDir, ParamsMap params) throws Exception {
 
         GroovyShell shell = createGroovyShell(libDir);
 
         Script script = shell.parse(new InputStreamReader(stream));
         ReportDSL reportDsl = (ReportDSL) script;
+        reportDsl.setParams(params);
         reportDsl.setLibDir(libDir);
         //reportDsl.setScript(file);
 
@@ -67,6 +68,7 @@ public class ReportParser {
     private static GroovyShell createGroovyShell(String libDir) {
         ImportCustomizer customizer = new ImportCustomizer();
         customizer.addImports("lukfor.reports.widgets.Component");
+        customizer.addStarImports("tech.tablesaw.api");
 
         CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
         compilerConfiguration.addCompilationCustomizers(customizer);

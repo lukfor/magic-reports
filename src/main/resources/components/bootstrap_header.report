@@ -1,11 +1,7 @@
 component("bootstrap_header") {
 
-    def defaults = [
-        color: "#546d78",
-        text_color: "#ffffff"
-    ]
-
-    options = defaults  + options
+    options.color = "#546d78"
+    options.text_color = "#ffffff"
 
     div(class: "px-4 py-5 text-center", style:"background-color: ${options.color}; color: ${options.text_color};") {
         h1(class: "display-5 fw-bold", options.title)

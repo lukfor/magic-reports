@@ -1,0 +1,23 @@
+component("plotly_scatter") {
+
+     plotly {
+
+        def tables = [options.data];
+        if (options.color) {
+            tables = options.data.splitOn(options.data.categoricalColumn(options.color))
+        }
+        for (table in tables){
+            scatter(
+                x: table.column(options.x).asList(),
+                y: table.column(options.y).asList(),
+                marker: [size: options.size],
+                name: table.name
+            )
+        }
+        layout (
+            xaxis: [title: options.x],
+            yaxis: [title: options.y]
+        )
+    }
+
+}

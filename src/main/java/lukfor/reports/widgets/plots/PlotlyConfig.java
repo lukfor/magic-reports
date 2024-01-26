@@ -12,6 +12,8 @@ public class PlotlyConfig implements IWidgetConfig {
 
     private List<HashMap<String, Object>> traces = new Vector<HashMap<String, Object>>();
 
+    private List<HashMap<String, Object>> shapes = new Vector<HashMap<String, Object>>();
+
     private Map<String, Object> layout = new HashMap<String, Object>();
 
     public void trace(HashMap<String, Object> params){
@@ -45,6 +47,23 @@ public class PlotlyConfig implements IWidgetConfig {
         traces.add(defaultParams);
     }
 
+    public void shape(HashMap<String, Object> params) {
+        shapes.add(params);
+    }
+
+    public void vertical_line(HashMap<String, Object> params) {
+        HashMap<String, Object> defaultParams = new HashMap<String, Object>();
+        defaultParams.put("type", "line");
+        defaultParams.put("x0", 0);
+        defaultParams.put("x1", 0);
+        defaultParams.put("y0", 0);
+        defaultParams.put("y1", 1);
+        defaultParams.put("xref", "x");
+        defaultParams.put("yref", "paper");
+        defaultParams.putAll(params);
+        shapes.add(defaultParams);
+    }
+
     public void histogram(HashMap<String, Object> params){
         HashMap<String, Object> defaultParams = new HashMap<String, Object>();
         defaultParams.put("type", "histogram");
@@ -64,7 +83,15 @@ public class PlotlyConfig implements IWidgetConfig {
     }
 
     public Map<String, Object> getLayout() {
-        return layout;
+        Map<String, Object> result = new HashMap<String, Object>(layout);
+        if (!shapes.isEmpty()){
+            result.put("shapes", shapes);
+        }
+        return result;
+    }
+
+    public List<HashMap<String, Object>> getShapes() {
+        return shapes;
     }
 
     private void parseXY(HashMap<String, Object> params) {

@@ -10,11 +10,11 @@ component("bootstrap_progress") {
         style += "height: ${options.height};"
     }
 
+    if (options.label) {
+        span(options.label)
+    }
     div(class: "progress ${options.class}", style: style) {
         div(class: "progress-bar bg-${options.color}", role: "progressbar", ariaValuenow: options.progress, ariaValuemin: "0", ariaValuemax: "100", style: "width: ${options.progress}%") {
-            if (options.label) {
-                span(class: "sr-only", "${options.progress}% Complete")
-            }
         }
     }
 }

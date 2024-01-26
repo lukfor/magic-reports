@@ -5,6 +5,7 @@ import java.util.HashMap;
 import groovy.lang.Closure;
 import lukfor.reports.HtmlWidgetsReport;
 import lukfor.reports.data.DataWrapper;
+import lukfor.reports.dsl.ParamsMap;
 import lukfor.reports.widgets.AbstractWidget;
 
 public class DataTableWidget extends AbstractWidget {
@@ -25,12 +26,7 @@ public class DataTableWidget extends AbstractWidget {
 	}
 
 	@Override
-	public void initWithClosure(HtmlWidgetsReport report, Closure closure) {
-		throw new RuntimeException("Not supported! please use datatable()");
-	}
-
-	@Override
-	public void initWithOptions(HtmlWidgetsReport report, HashMap<String, Object> options) {
+	public void setup(HtmlWidgetsReport report, ParamsMap options) {
 		config = new DataTableConfig(options);
 	}
 
@@ -51,8 +47,7 @@ public class DataTableWidget extends AbstractWidget {
 
 	@Override
 	public String[] getScripts() {
-		return new String[] { "https://code.jquery.com/jquery-3.5.1.slim.min.js",
-				"https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js" };
+		return new String[] { "https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js" };
 	}
 
 

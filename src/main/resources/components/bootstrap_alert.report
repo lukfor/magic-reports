@@ -1,6 +1,6 @@
 component("bootstrap_alert") {
 
-    options.type "danger"
+    options.type = "danger"
 
     div(
         class: "alert alert-${options.type}",

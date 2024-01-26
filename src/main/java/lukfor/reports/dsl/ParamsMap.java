@@ -22,6 +22,10 @@ public class ParamsMap extends LinkedHashMap<String, Object> {
         return super.putIfAbsent(key, value);
     }
 
+    public Object setDefault(String key, String value) {
+        return super.putIfAbsent(key, value);
+    }
+
     public static ParamsMap buildFromArgs(Object args) {
         ParamsMap options = new ParamsMap();
 

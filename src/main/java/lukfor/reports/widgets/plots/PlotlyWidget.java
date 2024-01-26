@@ -5,6 +5,7 @@ import java.util.HashMap;
 import groovy.lang.Closure;
 import lukfor.reports.HtmlWidgetsReport;
 import lukfor.reports.data.DataWrapper;
+import lukfor.reports.dsl.ParamsMap;
 import lukfor.reports.widgets.AbstractWidget;
 
 public class PlotlyWidget extends AbstractWidget {
@@ -14,6 +15,8 @@ public class PlotlyWidget extends AbstractWidget {
 	private String id;
 
 	private PlotlyConfig config;
+
+	private ParamsMap options;
 
 	public PlotlyWidget() {
 		id = createId(KEYWORD);
@@ -25,21 +28,22 @@ public class PlotlyWidget extends AbstractWidget {
 	}
 
 	@Override
-	public void initWithClosure(HtmlWidgetsReport report, Closure closure) {
+	public void setup(HtmlWidgetsReport report, ParamsMap options) {
+		this.options = options;
+		this.options.setDefault("height", "100%");
 		config = new PlotlyConfig();
+		if (!options.containsKey("body")){
+			return;
+		}
+		Closure closure = (Closure) options.get("body");
 		closure.setDelegate(config);
 		closure.setResolveStrategy(Closure.DELEGATE_FIRST);
 		closure.call();
 	}
 
 	@Override
-	public void initWithOptions(HtmlWidgetsReport report, HashMap<String, Object> options) {
-		throw new RuntimeException("Not supported! please use plotly{}");
-	}
-
-	@Override
 	public String getHtml() {
-		return "<div id=\"" + id + "\"></div>";
+		return "<div id=\"" + id + "\" style=\"height: " + options.get("height") + "\"></div>";
 	}
 
 	@Override

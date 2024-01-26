@@ -1,20 +1,37 @@
 import tech.tablesaw.columns.*
 
 component("bootstrap_select"){
-    div(class: "form-group mt-3") {
+    options.small = false
+    options.class = "mt-3"
+    div(class: "form-group ${options.class}") {
         if (options.label) {
             label(class: "form-label", options.label)
         }
         //TODO: disable in static mode?
-        select(class: "form-select", id: "combobox", name: options.param, "data-magic-param" : true ) {
-            for (value in options.values) {
-                def properties = [
-                    value: value instanceof Column ? value.name() : value
-                ]
-                if (properties.value == params[options.param]) {
-                    properties.selected = "selected"
+        select(class: "form-select ${options.small ?'form-select-sm' : '' }", id: "combobox", name: options.param, "data-magic-param" : true ) {
+
+            if (options.values instanceof List) {
+                for (value in options.values) {
+                    def properties = [
+                        value: value instanceof Column ? value.name() : value
+                    ]
+                    if (properties.value == params[options.param]) {
+                        properties.selected = "selected"
+                    }
+                    option(properties, properties.value)
                 }
-                option(properties, properties.value)
+            }
+            if (options.values instanceof Map) {
+                for (key in options.values.keySet()) {
+                    def value = options.values.get(key)
+                    def properties = [
+                        value: key
+                    ]
+                    if (properties.value == params[options.param]) {
+                        properties.selected = "selected"
+                    }
+                    option(properties, value)
+                }
             }
         }
     }

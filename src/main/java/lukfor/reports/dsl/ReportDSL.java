@@ -5,6 +5,7 @@ import groovy.lang.Script;
 import lukfor.reports.widgets.Component;
 import lukfor.reports.HtmlWidgetsReport;
 import lukfor.reports.widgets.ComponentRegistry;
+import lukfor.reports.widgets.IWidget;
 import lukfor.reports.widgets.WidgetRegistry;
 import lukfor.reports.widgets.plots.LeafletWidget;
 import lukfor.reports.widgets.plots.PlotlyWidget;
@@ -56,6 +57,10 @@ public class ReportDSL extends Script {
 
     public void component(String name, final Closure closure) throws IOException {
         ComponentRegistry.getInstance().register(name, new Component(name, this, closure));
+    }
+
+    public void widget(String name, Class<? extends IWidget> widget) throws IOException {
+        WidgetRegistry.getInstance().register(name, widget);
     }
 
     public void include(String filename) throws Exception {
